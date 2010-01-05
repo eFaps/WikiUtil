@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2009 The eFaps Team
+ * Copyright 2003 - 2010 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,12 +61,18 @@ PARSER_END(WikiParser)
   | < #PRAGMA_SIDEBAR:  (( "#sidebar" ) ( < SPACE > )+) >
   | < #PRAGMA_SUMMARY:  (( "#summary" ) ( < SPACE > )+) >
   | < #CODETEXT_START: ( "{{{" ) >
-  | < #HEADING6: ( "======" ) >
-  | < #HEADING5: ( "=====" ) >
-  | < #HEADING4: ( "====" ) >
-  | < #HEADING3: ( "===" ) >
-  | < #HEADING2: ( "==" ) >
-  | < #HEADING1: ( "=" ) >
+  | < #HEADING6_START: ( ( "======" ) ( < SPACE > )* ) >
+  | < #HEADING5_START: ( ( "=====" ) ( < SPACE > )* ) >
+  | < #HEADING4_START: ( ( "====" ) ( < SPACE > )* ) >
+  | < #HEADING3_START: ( ( "===" ) ( < SPACE > )* ) >
+  | < #HEADING2_START: ( ( "==" ) ( < SPACE > )* ) >
+  | < #HEADING1_START: ( ( "=" ) ( < SPACE > )* ) >
+  | < #HEADING6_END: ( ( < SPACE > )* ( "======" ) ) >
+  | < #HEADING5_END: ( ( < SPACE > )* ( "=====" ) ) >
+  | < #HEADING4_END: ( ( < SPACE > )* ( "====" ) ) >
+  | < #HEADING3_END: ( ( < SPACE > )* ( "===" ) ) >
+  | < #HEADING2_END: ( ( < SPACE > )* ( "==" ) ) >
+  | < #HEADING1_END: ( ( < SPACE > )* ( "=" ) ) >
   | < #ASTERISK: ( "*" ) >
   | < #SQUAREDBRACKETOPEN: ( "[" ) >
 
@@ -120,12 +126,12 @@ PARSER_END(WikiParser)
   | < I_PRAGMA_SIDEBAR: ( < PRAGMA_SIDEBAR > ) > : PRAGMA_TEXT_EXPECTED
   | < I_PRAGMA_SUMMARY: ( < PRAGMA_SUMMARY > ) > : PRAGMA_TEXT_EXPECTED
   | < I_CODETEXT_START: ( < CODETEXT_START > < NEWLINE > ) > : CODETEXT_EXPECTED
-  | < I_HEADING1_START: ( < HEADING1 > ) >  : DEFAULT
-  | < I_HEADING2_START: ( < HEADING2 > ) >  : DEFAULT
-  | < I_HEADING3_START: ( < HEADING3 > ) >  : DEFAULT
-  | < I_HEADING4_START: ( < HEADING4 > ) >  : DEFAULT
-  | < I_HEADING5_START: ( < HEADING5 > ) >  : DEFAULT
-  | < I_HEADING6_START: ( < HEADING6 > ) >  : DEFAULT
+  | < I_HEADING1_START: ( < HEADING1_START > ) >  : DEFAULT
+  | < I_HEADING2_START: ( < HEADING2_START > ) >  : DEFAULT
+  | < I_HEADING3_START: ( < HEADING3_START > ) >  : DEFAULT
+  | < I_HEADING4_START: ( < HEADING4_START > ) >  : DEFAULT
+  | < I_HEADING5_START: ( < HEADING5_START > ) >  : DEFAULT
+  | < I_HEADING6_START: ( < HEADING6_START > ) >  : DEFAULT
   | < I_LINKSTARTTEXT: ( < SQUAREDBRACKETOPEN > ) > : LINK_EXPECTED
 
   | < I_TEXT_DIVIDER: ( < TEXT_DIVIDER > ) > : DEFAULT
@@ -150,18 +156,18 @@ PARSER_END(WikiParser)
   | < D_PRAGMA_SUMMARY: ( < NEWLINE > < PRAGMA_SUMMARY > ) > : PRAGMA_TEXT_EXPECTED
   | < D_CODETEXT_START: ( < NEWLINE > < CODETEXT_START > < NEWLINE > ) > : CODETEXT_EXPECTED
   | < D_CODETEXTEMBEDDED_START: ( < CODETEXT_START > ) > : CODETEXTEMBEDDED_EXPECTED
-  | < D_HEADING1_START: ( < NEWLINE > < HEADING1 > ) > : DEFAULT
-  | < D_HEADING1_END: ( < HEADING1 > ) > : DEFAULT
-  | < D_HEADING2_START: ( < NEWLINE > < HEADING2 > ) > : DEFAULT
-  | < D_HEADING2_END: ( < HEADING2 > ) > : DEFAULT
-  | < D_HEADING3_START: ( < NEWLINE > < HEADING3 > ) > : DEFAULT
-  | < D_HEADING3_END: ( < HEADING3 > ) > : DEFAULT
-  | < D_HEADING4_START: ( < NEWLINE > < HEADING4 > ) > : DEFAULT
-  | < D_HEADING4_END: ( < HEADING4 > ) > : DEFAULT
-  | < D_HEADING5_START: ( < NEWLINE > < HEADING5 > ) > : DEFAULT
-  | < D_HEADING5_END: ( < HEADING5 > ) > : DEFAULT
-  | < D_HEADING6_START: ( < NEWLINE > < HEADING6 > ) > : DEFAULT
-  | < D_HEADING6_END: ( < HEADING6 > ) > : DEFAULT
+  | < D_HEADING1_START: ( < NEWLINE > < HEADING1_START > ) > : DEFAULT
+  | < D_HEADING1_END: ( < HEADING1_END > ) > : DEFAULT
+  | < D_HEADING2_START: ( < NEWLINE > < HEADING2_START > ) > : DEFAULT
+  | < D_HEADING2_END: ( < HEADING2_END > ) > : DEFAULT
+  | < D_HEADING3_START: ( < NEWLINE > < HEADING3_START > ) > : DEFAULT
+  | < D_HEADING3_END: ( < HEADING3_END > ) > : DEFAULT
+  | < D_HEADING4_START: ( < NEWLINE > < HEADING4_START > ) > : DEFAULT
+  | < D_HEADING4_END: ( < HEADING4_END > ) > : DEFAULT
+  | < D_HEADING5_START: ( < NEWLINE > < HEADING5_START > ) > : DEFAULT
+  | < D_HEADING5_END: ( < HEADING5_END > ) > : DEFAULT
+  | < D_HEADING6_START: ( < NEWLINE > < HEADING6_START > ) > : DEFAULT
+  | < D_HEADING6_END: ( < HEADING6_END > ) > : DEFAULT
   | < D_LINKSTARTTEXT: ( < SQUAREDBRACKETOPEN > ) > : LINK_EXPECTED
 
   | < D_TEXT_DIVIDER: ( < NEWLINE > < TEXT_DIVIDER > ) > : DEFAULT
@@ -330,7 +336,7 @@ void parseDoc() :
 }
 {
     pragmas()
-  | headers()
+  | textHeaders()
   | codeText()
   | textDivider()
   | parseTextListEntries()
@@ -365,12 +371,13 @@ void pragmas() :
     )
 }
 
-void headers() :
+void textHeaders() :
 {
+    Token tmp;
 }
 {
     (
-        ( < I_HEADING1_START > | < D_HEADING1_START > )
+        ( ( tmp = < I_HEADING1_START > ) | ( tmp = < D_HEADING1_START > ) )
         (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING1_END } )
             (
                 {
@@ -383,14 +390,17 @@ void headers() :
             )
           | (
                 {
-                    this.visitor.onSpecialSymbol("=");
+                    this.visitor.onSpecialSymbol(tmp.image.trim());
+                    for (int idx = 1; idx < tmp.image.length(); idx++)  {
+                        this.visitor.space();
+                    }
                 }
                 paragraph()
             )
         )
     )
   | (
-        ( < I_HEADING2_START > | < D_HEADING2_START > )
+        ( ( tmp = < I_HEADING2_START > ) | ( tmp = < D_HEADING2_START > ) )
         (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING2_END } )
             (
                 {
@@ -403,14 +413,17 @@ void headers() :
             )
           | (
                 {
-                    this.visitor.onSpecialSymbol("==");
+                    this.visitor.onSpecialSymbol(tmp.image.trim());
+                    for (int idx = 2; idx < tmp.image.length(); idx++)  {
+                        this.visitor.space();
+                    }
                 }
                 paragraph()
             )
         )
     )
   | (
-        ( < I_HEADING3_START > | < D_HEADING3_START > )
+        ( (tmp = < I_HEADING3_START > ) | (tmp = < D_HEADING3_START > ) )
         (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING3_END } )
             (
                 {
@@ -423,14 +436,17 @@ void headers() :
             )
           | (
                 {
-                    this.visitor.onSpecialSymbol("===");
+                    this.visitor.onSpecialSymbol(tmp.image.trim());
+                    for (int idx = 3; idx < tmp.image.length(); idx++)  {
+                        this.visitor.space();
+                    }
                 }
                 paragraph()
             )
         )
     )
   | (
-        ( < I_HEADING4_START > | < D_HEADING4_START > )
+        ( ( tmp = < I_HEADING4_START > ) | ( tmp = < D_HEADING4_START > ) )
         (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING4_END } )
             (
                 {
@@ -443,14 +459,17 @@ void headers() :
             )
           | (
                 {
-                    this.visitor.onSpecialSymbol("====");
+                    this.visitor.onSpecialSymbol(tmp.image.trim());
+                    for (int idx = 4; idx < tmp.image.length(); idx++)  {
+                        this.visitor.space();
+                    }
                 }
                 paragraph()
             )
         )
     )
   | (
-        ( < I_HEADING5_START > | < D_HEADING5_START > )
+        ( (tmp = < I_HEADING5_START > ) | ( tmp = < D_HEADING5_START > ) )
         (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING5_END } )
             (
                 {
@@ -463,14 +482,17 @@ void headers() :
             )
           | (
                 {
-                    this.visitor.onSpecialSymbol("=====");
+                    this.visitor.onSpecialSymbol(tmp.image.trim());
+                    for (int idx = 5; idx < tmp.image.length(); idx++)  {
+                        this.visitor.space();
+                    }
                 }
                 paragraph()
             )
         )
     )
   | (
-        ( < I_HEADING6_START > | < D_HEADING6_START > )
+        ( (tmp = < I_HEADING6_START > ) | ( tmp = < D_HEADING6_START > ) )
         (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING6_END } )
             (
                 {
@@ -483,7 +505,10 @@ void headers() :
             )
           | (
                 {
-                    this.visitor.onSpecialSymbol("======");
+                    this.visitor.onSpecialSymbol(tmp.image.trim());
+                    for (int idx = 6; idx < tmp.image.length(); idx++)  {
+                        this.visitor.space();
+                    }
                 }
                 paragraph()
             )

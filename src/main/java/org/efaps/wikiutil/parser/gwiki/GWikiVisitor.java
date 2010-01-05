@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2009 The eFaps Team
+ * Copyright 2003 - 2010 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -602,7 +602,7 @@ System.err.println("type face " + _typeface + " not defined and ignored");
 
     public void space()
     {
-        if (((this.heading == null) && this.listIndent.empty()) || (this.text != null))  {
+        if (this.listIndent.empty() || (this.text != null))  {
             if (this.text == null)  {
                 this.text = new StringBuilder();
             }

@@ -30,8 +30,8 @@ options {
 PARSER_BEGIN(WikiParser)
 package org.efaps.wikiutil.parser.gwiki.javacc;
 
-import org.efaps.wikiutil.parser.EProperty;
-import org.efaps.wikiutil.parser.ETypeface;
+import org.efaps.wikiutil.wem.EProperty;
+import org.efaps.wikiutil.wem.ETypeface;
 import org.efaps.wikiutil.parser.gwiki.EHeader;
 import org.efaps.wikiutil.parser.gwiki.GWikiVisitor;
 

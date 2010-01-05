@@ -32,17 +32,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.efaps.wikiutil.page.WikiPage;
-import org.efaps.wikiutil.page.element.AbstractLineElement;
-import org.efaps.wikiutil.page.element.Paragraph;
-import org.efaps.wikiutil.page.element.list.AbstractListEntry;
-import org.efaps.wikiutil.page.element.list.ListBulleted;
-import org.efaps.wikiutil.page.element.list.ListEntry;
-import org.efaps.wikiutil.page.element.list.ListNumbered;
-import org.efaps.wikiutil.page.element.text.AbstractInternalLink;
-import org.efaps.wikiutil.page.element.text.InternalLinkWithDescription;
 import org.efaps.wikiutil.parser.gwiki.GWikiParser;
 import org.efaps.wikiutil.parser.gwiki.javacc.ParseException;
+import org.efaps.wikiutil.wom.WikiPage;
+import org.efaps.wikiutil.wom.element.AbstractLineElement;
+import org.efaps.wikiutil.wom.element.Paragraph;
+import org.efaps.wikiutil.wom.element.list.AbstractListEntry;
+import org.efaps.wikiutil.wom.element.list.ListBulleted;
+import org.efaps.wikiutil.wom.element.list.ListEntry;
+import org.efaps.wikiutil.wom.element.list.ListNumbered;
+import org.efaps.wikiutil.wom.element.text.AbstractInternalLink;
+import org.efaps.wikiutil.wom.element.text.InternalLinkWithDescription;
 
 /**
  * Uses an index page with bulleted or numbered lists (and sub lists) and

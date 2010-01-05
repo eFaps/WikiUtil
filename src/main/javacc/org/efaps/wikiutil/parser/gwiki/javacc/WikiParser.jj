@@ -61,26 +61,26 @@ PARSER_END(WikiParser)
   | < #PRAGMA_SIDEBAR:  (( "#sidebar" ) ( < SPACE > )+) >
   | < #PRAGMA_SUMMARY:  (( "#summary" ) ( < SPACE > )+) >
   | < #CODETEXT_START: ( "{{{" ) >
-  | < #HEADING6_START: ( ( "======" ) ( < SPACE > )* ) >
-  | < #HEADING5_START: ( ( "=====" ) ( < SPACE > )* ) >
-  | < #HEADING4_START: ( ( "====" ) ( < SPACE > )* ) >
-  | < #HEADING3_START: ( ( "===" ) ( < SPACE > )* ) >
-  | < #HEADING2_START: ( ( "==" ) ( < SPACE > )* ) >
-  | < #HEADING1_START: ( ( "=" ) ( < SPACE > )* ) >
-  | < #HEADING6_END: ( ( < SPACE > )* ( "======" ) ) >
-  | < #HEADING5_END: ( ( < SPACE > )* ( "=====" ) ) >
-  | < #HEADING4_END: ( ( < SPACE > )* ( "====" ) ) >
-  | < #HEADING3_END: ( ( < SPACE > )* ( "===" ) ) >
-  | < #HEADING2_END: ( ( < SPACE > )* ( "==" ) ) >
-  | < #HEADING1_END: ( ( < SPACE > )* ( "=" ) ) >
   | < #ASTERISK: ( "*" ) >
   | < #SQUAREDBRACKETOPEN: ( "[" ) >
 
   | < #TEXT_DIVIDER: ( ( "----" ) ( "-" )* ) >
+  | < #TEXT_HEADING6_START: ( ( "======" ) ( < SPACE > )* ) >
+  | < #TEXT_HEADING5_START: ( ( "=====" ) ( < SPACE > )* ) >
+  | < #TEXT_HEADING4_START: ( ( "====" ) ( < SPACE > )* ) >
+  | < #TEXT_HEADING3_START: ( ( "===" ) ( < SPACE > )* ) >
+  | < #TEXT_HEADING2_START: ( ( "==" ) ( < SPACE > )* ) >
+  | < #TEXT_HEADING1_START: ( ( "=" ) ( < SPACE > )* ) >
+  | < #TEXT_HEADING6_END: ( ( < SPACE > )* ( "======" ) ) >
+  | < #TEXT_HEADING5_END: ( ( < SPACE > )* ( "=====" ) ) >
+  | < #TEXT_HEADING4_END: ( ( < SPACE > )* ( "====" ) ) >
+  | < #TEXT_HEADING3_END: ( ( < SPACE > )* ( "===" ) ) >
+  | < #TEXT_HEADING2_END: ( ( < SPACE > )* ( "==" ) ) >
+  | < #TEXT_HEADING1_END: ( ( < SPACE > )* ( "=" ) ) >
   | < #TEXT_IMAGE: ("http://" (~["\n","\r"," "])* (".png" | ".gif" | ".jpg" | ".jpeg") ) >
   | < #TEXT_EXTERNALLINK:  (("http://" | "ftp://") (~["\n","\r"," "])*) >
-  | < #TEXT_LISTBULLETED_ENTRY: ( ( < SPACE > )+ ( < ASTERISK > ) ) >
-  | < #TEXT_LISTNUMBERED_ENTRY: ( ( < SPACE > )+ ( "#" ) ) >
+  | < #TEXT_LISTBULLETED_ENTRY: ( ( < SPACE > )+ ( < ASTERISK > ) ( < SPACE > )* ) >
+  | < #TEXT_LISTNUMBERED_ENTRY: ( ( < SPACE > )+ ( "#" ) ( < SPACE > )* ) >
   | < #TEXT_TABLE_ENTRY: ( ( < SPACE > )* ( "||" ) ( < SPACE > )* ) >
   | < #TEXT_TYPEFACE_ITALIC: ( "_" ) >
 
@@ -126,15 +126,15 @@ PARSER_END(WikiParser)
   | < I_PRAGMA_SIDEBAR: ( < PRAGMA_SIDEBAR > ) > : PRAGMA_TEXT_EXPECTED
   | < I_PRAGMA_SUMMARY: ( < PRAGMA_SUMMARY > ) > : PRAGMA_TEXT_EXPECTED
   | < I_CODETEXT_START: ( < CODETEXT_START > < NEWLINE > ) > : CODETEXT_EXPECTED
-  | < I_HEADING1_START: ( < HEADING1_START > ) >  : DEFAULT
-  | < I_HEADING2_START: ( < HEADING2_START > ) >  : DEFAULT
-  | < I_HEADING3_START: ( < HEADING3_START > ) >  : DEFAULT
-  | < I_HEADING4_START: ( < HEADING4_START > ) >  : DEFAULT
-  | < I_HEADING5_START: ( < HEADING5_START > ) >  : DEFAULT
-  | < I_HEADING6_START: ( < HEADING6_START > ) >  : DEFAULT
   | < I_LINKSTARTTEXT: ( < SQUAREDBRACKETOPEN > ) > : LINK_EXPECTED
 
   | < I_TEXT_DIVIDER: ( < TEXT_DIVIDER > ) > : DEFAULT
+  | < I_TEXT_HEADING1_START: ( < TEXT_HEADING1_START > ) >  : DEFAULT
+  | < I_TEXT_HEADING2_START: ( < TEXT_HEADING2_START > ) >  : DEFAULT
+  | < I_TEXT_HEADING3_START: ( < TEXT_HEADING3_START > ) >  : DEFAULT
+  | < I_TEXT_HEADING4_START: ( < TEXT_HEADING4_START > ) >  : DEFAULT
+  | < I_TEXT_HEADING5_START: ( < TEXT_HEADING5_START > ) >  : DEFAULT
+  | < I_TEXT_HEADING6_START: ( < TEXT_HEADING6_START > ) >  : DEFAULT
   | < I_TEXT_IMAGE: ( < TEXT_IMAGE > ) > : DEFAULT
   | < I_TEXT_EXTERNALLINK: ( < TEXT_EXTERNALLINK > ) > : DEFAULT
   | < I_TEXT_LISTBULLETED_ENTRY: ( < TEXT_LISTBULLETED_ENTRY > ) > : DEFAULT
@@ -156,21 +156,21 @@ PARSER_END(WikiParser)
   | < D_PRAGMA_SUMMARY: ( < NEWLINE > < PRAGMA_SUMMARY > ) > : PRAGMA_TEXT_EXPECTED
   | < D_CODETEXT_START: ( < NEWLINE > < CODETEXT_START > < NEWLINE > ) > : CODETEXT_EXPECTED
   | < D_CODETEXTEMBEDDED_START: ( < CODETEXT_START > ) > : CODETEXTEMBEDDED_EXPECTED
-  | < D_HEADING1_START: ( < NEWLINE > < HEADING1_START > ) > : DEFAULT
-  | < D_HEADING1_END: ( < HEADING1_END > ) > : DEFAULT
-  | < D_HEADING2_START: ( < NEWLINE > < HEADING2_START > ) > : DEFAULT
-  | < D_HEADING2_END: ( < HEADING2_END > ) > : DEFAULT
-  | < D_HEADING3_START: ( < NEWLINE > < HEADING3_START > ) > : DEFAULT
-  | < D_HEADING3_END: ( < HEADING3_END > ) > : DEFAULT
-  | < D_HEADING4_START: ( < NEWLINE > < HEADING4_START > ) > : DEFAULT
-  | < D_HEADING4_END: ( < HEADING4_END > ) > : DEFAULT
-  | < D_HEADING5_START: ( < NEWLINE > < HEADING5_START > ) > : DEFAULT
-  | < D_HEADING5_END: ( < HEADING5_END > ) > : DEFAULT
-  | < D_HEADING6_START: ( < NEWLINE > < HEADING6_START > ) > : DEFAULT
-  | < D_HEADING6_END: ( < HEADING6_END > ) > : DEFAULT
   | < D_LINKSTARTTEXT: ( < SQUAREDBRACKETOPEN > ) > : LINK_EXPECTED
 
   | < D_TEXT_DIVIDER: ( < NEWLINE > < TEXT_DIVIDER > ) > : DEFAULT
+  | < D_TEXT_HEADING1_START: ( < NEWLINE > < TEXT_HEADING1_START > ) > : DEFAULT
+  | < D_TEXT_HEADING1_END: ( < TEXT_HEADING1_END > ) > : DEFAULT
+  | < D_TEXT_HEADING2_START: ( < NEWLINE > < TEXT_HEADING2_START > ) > : DEFAULT
+  | < D_TEXT_HEADING2_END: ( < TEXT_HEADING2_END > ) > : DEFAULT
+  | < D_TEXT_HEADING3_START: ( < NEWLINE > < TEXT_HEADING3_START > ) > : DEFAULT
+  | < D_TEXT_HEADING3_END: ( < TEXT_HEADING3_END > ) > : DEFAULT
+  | < D_TEXT_HEADING4_START: ( < NEWLINE > < TEXT_HEADING4_START > ) > : DEFAULT
+  | < D_TEXT_HEADING4_END: ( < TEXT_HEADING4_END > ) > : DEFAULT
+  | < D_TEXT_HEADING5_START: ( < NEWLINE > < TEXT_HEADING5_START > ) > : DEFAULT
+  | < D_TEXT_HEADING5_END: ( < TEXT_HEADING5_END > ) > : DEFAULT
+  | < D_TEXT_HEADING6_START: ( < NEWLINE > < TEXT_HEADING6_START > ) > : DEFAULT
+  | < D_TEXT_HEADING6_END: ( < TEXT_HEADING6_END > ) > : DEFAULT
   | < D_TEXT_IMAGE: ( < TEXT_IMAGE > ) > : DEFAULT
   | < D_TEXT_EXTERNALLINK: ( < TEXT_EXTERNALLINK > ) > : DEFAULT
   | < D_TEXT_LISTBULLETED_ENTRY: ( < NEWLINE > < TEXT_LISTBULLETED_ENTRY > ) > : DEFAULT
@@ -377,8 +377,8 @@ void textHeaders() :
 }
 {
     (
-        ( ( tmp = < I_HEADING1_START > ) | ( tmp = < D_HEADING1_START > ) )
-        (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING1_END } )
+        ( ( tmp = < I_TEXT_HEADING1_START > ) | ( tmp = < D_TEXT_HEADING1_START > ) )
+        (LOOKAHEAD( line(), { jj_scanpos.kind == D_TEXT_HEADING1_END } )
             (
                 {
                     this.visitor.headingStart(EHeader.LEVEL1);
@@ -400,8 +400,8 @@ void textHeaders() :
         )
     )
   | (
-        ( ( tmp = < I_HEADING2_START > ) | ( tmp = < D_HEADING2_START > ) )
-        (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING2_END } )
+        ( ( tmp = < I_TEXT_HEADING2_START > ) | ( tmp = < D_TEXT_HEADING2_START > ) )
+        (LOOKAHEAD( line(), { jj_scanpos.kind == D_TEXT_HEADING2_END } )
             (
                 {
                     this.visitor.headingStart(EHeader.LEVEL2);
@@ -423,8 +423,8 @@ void textHeaders() :
         )
     )
   | (
-        ( (tmp = < I_HEADING3_START > ) | (tmp = < D_HEADING3_START > ) )
-        (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING3_END } )
+        ( (tmp = < I_TEXT_HEADING3_START > ) | (tmp = < D_TEXT_HEADING3_START > ) )
+        (LOOKAHEAD( line(), { jj_scanpos.kind == D_TEXT_HEADING3_END } )
             (
                 {
                     this.visitor.headingStart(EHeader.LEVEL3);
@@ -446,8 +446,8 @@ void textHeaders() :
         )
     )
   | (
-        ( ( tmp = < I_HEADING4_START > ) | ( tmp = < D_HEADING4_START > ) )
-        (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING4_END } )
+        ( ( tmp = < I_TEXT_HEADING4_START > ) | ( tmp = < D_TEXT_HEADING4_START > ) )
+        (LOOKAHEAD( line(), { jj_scanpos.kind == D_TEXT_HEADING4_END } )
             (
                 {
                     this.visitor.headingStart(EHeader.LEVEL4);
@@ -469,8 +469,8 @@ void textHeaders() :
         )
     )
   | (
-        ( (tmp = < I_HEADING5_START > ) | ( tmp = < D_HEADING5_START > ) )
-        (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING5_END } )
+        ( (tmp = < I_TEXT_HEADING5_START > ) | ( tmp = < D_TEXT_HEADING5_START > ) )
+        (LOOKAHEAD( line(), { jj_scanpos.kind == D_TEXT_HEADING5_END } )
             (
                 {
                     this.visitor.headingStart(EHeader.LEVEL5);
@@ -492,8 +492,8 @@ void textHeaders() :
         )
     )
   | (
-        ( (tmp = < I_HEADING6_START > ) | ( tmp = < D_HEADING6_START > ) )
-        (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING6_END } )
+        ( (tmp = < I_TEXT_HEADING6_START > ) | ( tmp = < D_TEXT_HEADING6_START > ) )
+        (LOOKAHEAD( line(), { jj_scanpos.kind == D_TEXT_HEADING6_END } )
             (
                 {
                     this.visitor.headingStart(EHeader.LEVEL6);
@@ -690,8 +690,8 @@ void line() :
           | (
                 ( ( tmp = < I_SPECIAL_SYMBOL > ) | ( tmp = < D_SPECIAL_SYMBOL > )
                 | ( tmp = < D_APOSTROPHE > )
-                | ( tmp = < D_HEADING1_END > ) | ( tmp = < D_HEADING2_END > ) | ( tmp = < D_HEADING3_END > )
-                | ( tmp = < D_HEADING4_END > ) | ( tmp = < D_HEADING5_END > ) | ( tmp = < D_HEADING6_END > ) )
+                | ( tmp = < D_TEXT_HEADING1_END > ) | ( tmp = < D_TEXT_HEADING2_END > ) | ( tmp = < D_TEXT_HEADING3_END > )
+                | ( tmp = < D_TEXT_HEADING4_END > ) | ( tmp = < D_TEXT_HEADING5_END > ) | ( tmp = < D_TEXT_HEADING6_END > ) )
                 {
                     this.visitor.onSpecialSymbol(tmp.image);
                 }

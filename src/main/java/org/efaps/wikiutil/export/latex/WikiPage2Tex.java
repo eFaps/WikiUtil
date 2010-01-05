@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2009 The eFaps Team
+ * Copyright 2003 - 2010 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,8 +51,8 @@ import org.efaps.wikiutil.page.element.text.TextString;
 import org.efaps.wikiutil.page.element.text.TypefaceBold;
 import org.efaps.wikiutil.page.element.text.TypefaceCode;
 import org.efaps.wikiutil.page.element.text.TypefaceItalic;
+import org.efaps.wikiutil.parser.gwiki.GWikiParser;
 import org.efaps.wikiutil.parser.gwiki.javacc.ParseException;
-import org.efaps.wikiutil.parser.gwiki.javacc.WikiParser;
 
 /**
  * Converts one Wiki page to a Latex file.
@@ -154,8 +154,7 @@ public class WikiPage2Tex
         throws IOException, ParseException
     {
         this.texOut.getParentFile().mkdirs();
-        final WikiParser parser = new WikiParser(this.url.openStream(), "UTF8");
-        final WikiPage page = parser.parse();
+        final WikiPage page = GWikiParser.parse(this.url.openStream(), "UTF8");
         final Writer out = new FileWriter(this.texOut);
         try  {
             this.convert(out, page);

@@ -600,16 +600,27 @@ System.err.println("type face " + _typeface + " not defined and ignored");
         }
     }
 
+    /**
+     * Appends a space to {@link #text}. If {@link #text} is <code>null</code>,
+     * {@link #text} is initialized.
+     *
+     * @see #text
+     */
     public void space()
     {
-        if (this.listIndent.empty() || (this.text != null))  {
-            if (this.text == null)  {
-                this.text = new StringBuilder();
-            }
-            this.text.append(' ');
+        if (this.text == null)  {
+            this.text = new StringBuilder();
         }
+        this.text.append(' ');
     }
 
+    /**
+     * Appends special symbol <code>_symbol</code> to {@link #text}. If
+     * {@link #text} is <code>null</code> {@link #text} is initialized.
+     *
+     * @param _symbol   special symbol to append
+     * @see #text
+     */
     public void onSpecialSymbol(final String _symbol)
     {
         if (this.text == null)  {

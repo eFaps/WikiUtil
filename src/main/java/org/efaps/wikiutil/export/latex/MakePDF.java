@@ -296,7 +296,7 @@ public class MakePDF
         throws IOException
     {
         final String name = new StringBuilder(MakePDF.RESOURCEDIR).append(_name).toString();
-        final InputStream in = Wiki2Page.class.getClassLoader().getResourceAsStream(name);
+        final InputStream in = this.getClass().getClassLoader().getResourceAsStream(name);
         if (in == null)  {
             throw new IOException("could not found " + _name);
         }

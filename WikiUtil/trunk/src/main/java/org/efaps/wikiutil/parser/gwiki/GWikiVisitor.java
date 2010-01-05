@@ -24,6 +24,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Stack;
 
+import org.apache.commons.lang.StringUtils;
 import org.efaps.wikiutil.parser.EProperty;
 import org.efaps.wikiutil.parser.ETypeface;
 import org.efaps.wikiutil.parser.IWikiEventModel;
@@ -277,7 +278,7 @@ public class GWikiVisitor
     public void listEntryStart(final String _listEntryType,
                                final boolean _isNumbered)
     {
-        final int indt = _listEntryType.length();
+        final int indt = StringUtils.stripEnd(_listEntryType, " \t").length();
         if (this.listIndent.isEmpty())  {
             this.makeEndText(true);
             this.listIndent.add(indt);

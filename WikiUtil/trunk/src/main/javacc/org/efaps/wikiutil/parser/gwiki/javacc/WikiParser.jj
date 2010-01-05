@@ -311,8 +311,6 @@ PARSER_END(WikiParser)
 public WikiPage parse() :
 {
     token_source.SwitchTo(INITIAL_CONTEXT);
-    Token tmp;
- //   this.page = new WikiPage();
     final WEM2WOM wem2wom = new WEM2WOM();
     this.visitor = new GWikiVisitor(wem2wom);
 }
@@ -339,7 +337,7 @@ void parseDoc() :
   | textHeaders()
   | codeText()
   | textDivider()
-  | parseTextListEntries()
+  | textListEntries()
   | paragraph()
   | emptyParagraph()
   | textTableStart()
@@ -558,20 +556,37 @@ void textDivider() :
     }
 }
 
-void parseTextListEntries() :
+/**
+ * Reads multiple text entries (bulleted or numbered). After the multiple text
+ * entries a text block could be exists (where the first new line is ignored
+ * because required to end the list entries).
+ */
+void textListEntries() :
 {
 }
 {
-    ( ( LOOKAHEAD(2) parseTextListEntry() )+ )
+    ( ( LOOKAHEAD(2) textListEntry() )+ )
     {
         this.visitor.listEntriesEnd();
     }
+    // is directly after last list entry a new line with text started?
+    ( LOOKAHEAD(2)
+        < NEWLINE >
+        line()
+    )?
+    ( LOOKAHEAD(2)
+        < NEWLINE >
+        {
+            this.visitor.newLine();
+        }
+        line()
+    )*
 }
 
 /**
  * Reads one list entry.
  */
-void parseTextListEntry() :
+void textListEntry() :
 {
     Token tmp;
 }

@@ -1,0 +1,825 @@
+/*
+ * Copyright 2003 - 2009 The eFaps Team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * Revision:        $Rev$
+ * Last Changed:    $Date$
+ * Last Changed By: $Author$
+ */
+
+options {
+  JDK_VERSION = "1.6";
+  STATIC = false;
+  ERROR_REPORTING = false;
+  USER_TOKEN_MANAGER = false;
+  UNICODE_INPUT = true;
+ // LOOKAHEAD = 3;
+}
+
+PARSER_BEGIN(WikiParser)
+package org.efaps.wikiutil.parser.gwiki.javacc;
+
+import org.efaps.wikiutil.page.WikiPage;
+import org.efaps.wikiutil.parser.EProperty;
+import org.efaps.wikiutil.parser.ETypeface;
+import org.efaps.wikiutil.parser.WEM2WOM;
+import org.efaps.wikiutil.parser.gwiki.EHeader;
+import org.efaps.wikiutil.parser.gwiki.GWikiVisitor;
+
+/**
+ * Parser for Wiki's in Google Code style.
+ *
+ * @author The eFaps Team
+ * @version $Id$
+ */
+public class WikiParser
+{
+    /**
+     * Current parsed google Wiki visitor pattern.
+     *
+     * @see #parse()
+     */
+    private GWikiVisitor visitor;
+}
+PARSER_END(WikiParser)
+
+
+< DEFAULT, INITIAL_CONTEXT > TOKEN : /** first level */
+{
+    < #PRAGMA_LABELS:   (( "#labels" ) ( < SPACE > )+) >
+  | < #PRAGMA_SIDEBAR:  (( "#sidebar" ) ( < SPACE > )+) >
+  | < #PRAGMA_SUMMARY:  (( "#summary" ) ( < SPACE > )+) >
+  | < #CODETEXT_START: ( "{{{" ) >
+  | < #HEADING6: ( "======" ) >
+  | < #HEADING5: ( "=====" ) >
+  | < #HEADING4: ( "====" ) >
+  | < #HEADING3: ( "===" ) >
+  | < #HEADING2: ( "==" ) >
+  | < #HEADING1: ( "=" ) >
+  | < #ASTERISK: ( "*" ) >
+  | < #SQUAREDBRACKETOPEN: ( "[" ) >
+
+  | < #TEXT_DIVIDER: ( ( "----" ) ( "-" )* ) >
+  | < #TEXT_IMAGE: ("http://" (~["\n","\r"," "])* (".png" | ".gif" | ".jpg" | ".jpeg") ) >
+  | < #TEXT_EXTERNALLINK:  (("http://" | "ftp://") (~["\n","\r"," "])*) >
+  | < #TEXT_LISTBULLETED_ENTRY: ( ( < SPACE > )+ ( < ASTERISK > ) ) >
+  | < #TEXT_LISTNUMBERED_ENTRY: ( ( < SPACE > )+ ( "#" ) ) >
+  | < #TEXT_TABLE_ENTRY: ( ( < SPACE > )* ( "||" ) ( < SPACE > )* ) >
+  | < #TEXT_TYPEFACE_ITALIC: ( "_" ) >
+
+  | < #XML_CODE_START: ( "<code>") >
+  | < #XML_PARAGRAPH_START: ( ( "<p" ) ( < SPACE > )* ( ">" ) ) >
+  | < #XML_PARAGRAPH_END: ( ( "</p" )  ( < SPACE > )* ( ">" ) ) >
+  | < #XML_TOC_START: ( "<wiki:toc" ) >
+  | < #XML_TOC_MAXDEPTH: ( "max_depth" ) ( < SPACE > )* ( "=" ) ( < SPACE > )* ( < APOSTROPHE > ) >
+
+  | < NEWLINE: ( "\r\n" | "\r" | "\n" ) >         : DEFAULT
+  | < #SPACE : [" ", "\t"] >
+  | < #APOSTROPHE : ( "\"" ) >
+    // All special symbols from the range 0-127
+  | <#SPECIAL_SYMBOL : [
+        "!",               "#",     "$",     "%",     "&",     "'",     "(",
+        ")",               "+",     ",",     "-",     ".",     "/",     ":",
+        ";",     "<",               ">",     "?",     "@",              "\\",
+        "]",     "^",               "`",     "{",     "|",     "}",     "~"
+  ] >
+  | < #CHAR : ~[
+        "\n", "\r", "\t"," ", "\"",
+        "*", "=",
+        "[",
+        "!",          "#",     "$",     "%",     "&",     "'",     "(",
+        ")",               "+",     ",",     "-",     ".",     "/",     ":",
+        ";",     "<",           ">",     "?",     "@",              "\\",
+        "]",     "^",      "_",     "`",     "{",     "|",     "}",     "~"
+    ] >
+  /*
+    | < HTML_LISTSTART: "<ul>" >                    : DEFAULT
+    | < HTML_LISTEND: "</ul>" >                     : DEFAULT
+    | < HTML_LISTITEMSTART: "<li>" >                : DEFAULT
+    | < HTML_LISTITEMEND: "</li>" >                 : DEFAULT
+    | < HTML_SEPARATOR: ([" ","+","-","<","\""]) >
+                                                    : DEFAULT
+    | < HTML_TEXT: (~["\n","\r"," ","+","-","=","<","\""]) >
+                                                    : DEFAULT*/
+}
+
+< INITIAL_CONTEXT > TOKEN :
+{
+    < I_PRAGMA_LABELS: ( < PRAGMA_LABELS > ) > : PRAGMA_TEXT_EXPECTED
+  | < I_PRAGMA_SIDEBAR: ( < PRAGMA_SIDEBAR > ) > : PRAGMA_TEXT_EXPECTED
+  | < I_PRAGMA_SUMMARY: ( < PRAGMA_SUMMARY > ) > : PRAGMA_TEXT_EXPECTED
+  | < I_CODETEXT_START: ( < CODETEXT_START > < NEWLINE > ) > : CODETEXT_EXPECTED
+  | < I_HEADING1_START: ( < HEADING1 > ) >  : DEFAULT
+  | < I_HEADING2_START: ( < HEADING2 > ) >  : DEFAULT
+  | < I_HEADING3_START: ( < HEADING3 > ) >  : DEFAULT
+  | < I_HEADING4_START: ( < HEADING4 > ) >  : DEFAULT
+  | < I_HEADING5_START: ( < HEADING5 > ) >  : DEFAULT
+  | < I_HEADING6_START: ( < HEADING6 > ) >  : DEFAULT
+  | < I_LINKSTARTTEXT: ( < SQUAREDBRACKETOPEN > ) > : LINK_EXPECTED
+
+  | < I_TEXT_DIVIDER: ( < TEXT_DIVIDER > ) > : DEFAULT
+  | < I_TEXT_IMAGE: ( < TEXT_IMAGE > ) > : DEFAULT
+  | < I_TEXT_EXTERNALLINK: ( < TEXT_EXTERNALLINK > ) > : DEFAULT
+  | < I_TEXT_LISTBULLETED_ENTRY: ( < TEXT_LISTBULLETED_ENTRY > ) > : DEFAULT
+  | < I_TEXT_LISTNUMBERED_ENTRY: ( < TEXT_LISTNUMBERED_ENTRY > ) > : DEFAULT
+  | < I_TEXT_TABLE_STARTROW: ( < TEXT_TABLE_ENTRY > ) > : DEFAULT
+
+  | < I_XML_CODE_START: ( < XML_CODE_START > ) > : CODEHTML_EXPECTED
+  | < I_XML_PARAGRAPH_START: ( < XML_PARAGRAPH_START > ) > : DEFAULT
+  | < I_XML_TOC_START: ( < XML_TOC_START > ) > : DEFAULT
+
+  | < I_WORD : ( <CHAR> )+ > : DEFAULT
+  | < I_SPECIAL_SYMBOL: ( < SPECIAL_SYMBOL > ) > : DEFAULT
+}
+
+< DEFAULT > TOKEN:
+{
+    < D_PRAGMA_LABELS: ( < NEWLINE > < PRAGMA_LABELS > ) > : PRAGMA_TEXT_EXPECTED
+  | < D_PRAGMA_SIDEBAR: ( < NEWLINE > < PRAGMA_SIDEBAR > ) > : PRAGMA_TEXT_EXPECTED
+  | < D_PRAGMA_SUMMARY: ( < NEWLINE > < PRAGMA_SUMMARY > ) > : PRAGMA_TEXT_EXPECTED
+  | < D_CODETEXT_START: ( < NEWLINE > < CODETEXT_START > < NEWLINE > ) > : CODETEXT_EXPECTED
+  | < D_CODETEXTEMBEDDED_START: ( < CODETEXT_START > ) > : CODETEXTEMBEDDED_EXPECTED
+  | < D_HEADING1_START: ( < NEWLINE > < HEADING1 > ) > : DEFAULT
+  | < D_HEADING1_END: ( < HEADING1 > ) > : DEFAULT
+  | < D_HEADING2_START: ( < NEWLINE > < HEADING2 > ) > : DEFAULT
+  | < D_HEADING2_END: ( < HEADING2 > ) > : DEFAULT
+  | < D_HEADING3_START: ( < NEWLINE > < HEADING3 > ) > : DEFAULT
+  | < D_HEADING3_END: ( < HEADING3 > ) > : DEFAULT
+  | < D_HEADING4_START: ( < NEWLINE > < HEADING4 > ) > : DEFAULT
+  | < D_HEADING4_END: ( < HEADING4 > ) > : DEFAULT
+  | < D_HEADING5_START: ( < NEWLINE > < HEADING5 > ) > : DEFAULT
+  | < D_HEADING5_END: ( < HEADING5 > ) > : DEFAULT
+  | < D_HEADING6_START: ( < NEWLINE > < HEADING6 > ) > : DEFAULT
+  | < D_HEADING6_END: ( < HEADING6 > ) > : DEFAULT
+  | < D_LINKSTARTTEXT: ( < SQUAREDBRACKETOPEN > ) > : LINK_EXPECTED
+
+  | < D_TEXT_DIVIDER: ( < NEWLINE > < TEXT_DIVIDER > ) > : DEFAULT
+  | < D_TEXT_IMAGE: ( < TEXT_IMAGE > ) > : DEFAULT
+  | < D_TEXT_EXTERNALLINK: ( < TEXT_EXTERNALLINK > ) > : DEFAULT
+  | < D_TEXT_LISTBULLETED_ENTRY: ( < NEWLINE > < TEXT_LISTBULLETED_ENTRY > ) > : DEFAULT
+  | < D_TEXT_LISTNUMBERED_ENTRY: ( < NEWLINE > < TEXT_LISTNUMBERED_ENTRY > ) > : DEFAULT
+  | < D_TEXT_TABLE_STARTROW: ( < NEWLINE > < TEXT_TABLE_ENTRY > ) > : DEFAULT
+  | < D_TEXT_TABLE_ENTRY: ( < TEXT_TABLE_ENTRY > ) > : DEFAULT
+
+  | < D_XML_CODE_START: ( < XML_CODE_START > ) > : CODEHTML_EXPECTED
+  | < D_XML_PARAGRAPH_START: ( < XML_PARAGRAPH_START > ) > : DEFAULT
+  | < D_XML_PARAGRAPH_END: ( < XML_PARAGRAPH_END > ) > : DEFAULT
+  | < D_XML_TOC_START: ( < XML_TOC_START > ) > : DEFAULT
+  | < D_XML_TOC_MAXDEPTH: ( < XML_TOC_MAXDEPTH > ) > : DEFAULT
+
+  | < D_TEXT_TYPEFACE_BOLD: ( < ASTERISK > ) > : DEFAULT
+  | < D_TEXT_TYPEFACE_ITALIC: ( < TEXT_TYPEFACE_ITALIC > ) > : DEFAULT
+
+  | < D_SPACE: ( < SPACE > )+ > : DEFAULT
+  | < D_APOSTROPHE: ( < APOSTROPHE > ) > : DEFAULT
+  | < D_WORD : ( <CHAR> )+ > : DEFAULT
+  | < D_SPECIAL_SYMBOL: ( < SPECIAL_SYMBOL > ) > : DEFAULT
+}
+
+/////////////////////////////////////////////////////////// Pragma Text Handling
+
+< PRAGMA_TEXT_EXPECTED > TOKEN :
+{
+      < PRAGMA_TEXT : (~["\n","\r"])* > : DEFAULT
+}
+
+///////////////////////////////////////////////////// Links within Text Handling
+
+< LINK_EXPECTED > TOKEN:
+{
+      < LINK_URL:  ( ("http://" | "ftp://") (~["\n","\r"," ","]"])+ ) >
+                                                    : LINK_EXPECTED
+    | < LINK_INTERNAL: (~["\n","\r"," ","]"])+ >    : LINK_EXPECTED
+    | < LINK_TEXT: (~["]"]) >                       : LINK_EXPECTED
+    | < LINK_END: "]" >                             : DEFAULT
+}
+
+///////////////////////////////////////////////////////////// Text Code Handling
+
+< CODETEXT_EXPECTED> MORE :
+{
+      <(~["\n","\r"])> : CODETEXT_EXPECTED
+    | <( "\r\n" )>
+        {
+            final int length1 = image.length();
+            image.replace(length1 - 2, length1, "\n");
+        }
+        : CODETEXT_EXPECTED
+    | <( "\r" )>
+        {
+            final int length2 = image.length();
+            image.replace(length2 - 1, length2, "\n");
+        }
+        : CODETEXT_EXPECTED
+    | <( "\n" )> : CODETEXT_EXPECTED
+}
+
+< CODETEXT_EXPECTED > TOKEN :
+{
+      < CODETEXT: ( < NEWLINE > "}}}") >
+        {
+            final int length = image.length();
+            final int end = (image.charAt(length - 5) == '\r') ? (length - 5) : (length - 4);
+            matchedToken.image = image.substring(0, end);
+        }
+        : DEFAULT
+}
+
+//////////////////////////////////////////////////// Embedded Text Code Handling
+
+< CODETEXTEMBEDDED_EXPECTED> MORE :
+{
+      <(~["\n","\r"])> : CODETEXTEMBEDDED_EXPECTED
+    | <( "\r\n" )>
+        {
+            final int codeTextEmbeddedLength1 = image.length();
+            image.replace(codeTextEmbeddedLength1 - 2, codeTextEmbeddedLength1, "\n");
+        }
+        : CODETEXTEMBEDDED_EXPECTED
+    | <( "\r" )>
+        {
+            final int codeTextEmbeddedLength2 = image.length();
+            image.replace(codeTextEmbeddedLength2 - 1, codeTextEmbeddedLength2, "\n");
+        }
+        : CODETEXTEMBEDDED_EXPECTED
+    | <( "\n" )> : CODETEXTEMBEDDED_EXPECTED
+}
+
+< CODETEXTEMBEDDED_EXPECTED > TOKEN :
+{
+      < CODETEXTEMBEDDED: ( "}}}") >
+        {
+            final int codeTextEmbeddedLength = image.length();
+            final int codeTextEmbeddedEnd = (image.charAt(codeTextEmbeddedLength - 4) == '\r') ? (codeTextEmbeddedLength - 4) : (codeTextEmbeddedLength - 3);
+            matchedToken.image = image.substring(0, codeTextEmbeddedEnd);
+        }
+        : DEFAULT
+}
+
+///////////////////////////////////////////////////////////// HTML Code Handling
+
+<CODEHTML_EXPECTED> MORE :
+{
+      < (~["\n","\r"]) > : CODEHTML_EXPECTED
+    | < ( "\r\n" ) >
+        {
+            final int htmlCodeLength1 = image.length();
+            image.replace(htmlCodeLength1 - 2, htmlCodeLength1, "\n");
+        }
+        : CODEHTML_EXPECTED
+    | < ( "\r" ) >
+        {
+            final int htmlCodeLength2 = image.length();
+            image.replace(htmlCodeLength2 - 1, htmlCodeLength2, "\n");
+        }
+        : CODEHTML_EXPECTED
+    | < ( "\n" ) > : CODEHTML_EXPECTED
+}
+
+<CODEHTML_EXPECTED> TOKEN :
+{
+    < XMLCODE: ( "</code>") >
+        {
+            final int htmlCodeLength = image.length();
+            final int htmlCodeStart = 6;//((image.charAt(3) == '\r') && (image.charAt(4) == '\n')) ? 5 : 4;
+            final int htmlCodeEnd = htmlCodeLength - 7;//(image.charAt(htmlCodeLength - 5) == '\r') ? (htmlCodeLength - 5) : (htmlCodeLength - 4);
+            matchedToken.image = image.substring(0, htmlCodeEnd);
+        }
+        : DEFAULT
+}
+
+////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////// Parser
+
+public WikiPage parse() :
+{
+    token_source.SwitchTo(INITIAL_CONTEXT);
+    Token tmp;
+ //   this.page = new WikiPage();
+    final WEM2WOM wem2wom = new WEM2WOM();
+    this.visitor = new GWikiVisitor(wem2wom);
+}
+{
+    {
+        this.visitor.documentStart();
+    }
+    ( parseDoc() )*
+    < EOF >
+    {
+        this.visitor.documentEnd();
+        return wem2wom.getPage();
+    }
+}
+
+/**
+ * Parse one document.
+ */
+void parseDoc() :
+{
+}
+{
+    pragmas()
+  | headers()
+  | codeText()
+  | textDivider()
+  | parseTextListEntries()
+  | paragraph()
+  | emptyParagraph()
+  | textTableStart()
+}
+
+
+void pragmas() :
+{
+    Token tmp;
+}
+{
+    (
+        ( < I_PRAGMA_LABELS > | < D_PRAGMA_LABELS > ) tmp = < PRAGMA_TEXT >
+        {
+            this.visitor.onProperty(EProperty.KEY, tmp.image);
+        }
+    )
+  | (
+        ( < I_PRAGMA_SIDEBAR > | < D_PRAGMA_SIDEBAR > ) tmp = <PRAGMA_TEXT>
+        {
+            this.visitor.onProperty(EProperty.SIDEBAR, tmp.image);
+        }
+    )
+  | (
+        ( < I_PRAGMA_SUMMARY > | < D_PRAGMA_SUMMARY > ) tmp = <PRAGMA_TEXT>
+        {
+            this.visitor.onProperty(EProperty.DESCRIPTION, tmp.image);
+        }
+    )
+}
+
+void headers() :
+{
+}
+{
+    (
+        ( < I_HEADING1_START > | < D_HEADING1_START > )
+        (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING1_END } )
+            (
+                {
+                    this.visitor.headingStart(EHeader.LEVEL1);
+                }
+                line()
+                {
+                    this.visitor.headingEnd();
+                }
+            )
+          | (
+                {
+                    this.visitor.onSpecialSymbol("=");
+                }
+                paragraph()
+            )
+        )
+    )
+  | (
+        ( < I_HEADING2_START > | < D_HEADING2_START > )
+        (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING2_END } )
+            (
+                {
+                    this.visitor.headingStart(EHeader.LEVEL2);
+                }
+                line()
+                {
+                    this.visitor.headingEnd();
+                }
+            )
+          | (
+                {
+                    this.visitor.onSpecialSymbol("==");
+                }
+                paragraph()
+            )
+        )
+    )
+  | (
+        ( < I_HEADING3_START > | < D_HEADING3_START > )
+        (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING3_END } )
+            (
+                {
+                    this.visitor.headingStart(EHeader.LEVEL3);
+                }
+                line()
+                {
+                    this.visitor.headingEnd();
+                }
+            )
+          | (
+                {
+                    this.visitor.onSpecialSymbol("===");
+                }
+                paragraph()
+            )
+        )
+    )
+  | (
+        ( < I_HEADING4_START > | < D_HEADING4_START > )
+        (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING4_END } )
+            (
+                {
+                    this.visitor.headingStart(EHeader.LEVEL4);
+                }
+                line()
+                {
+                    this.visitor.headingEnd();
+                }
+            )
+          | (
+                {
+                    this.visitor.onSpecialSymbol("====");
+                }
+                paragraph()
+            )
+        )
+    )
+  | (
+        ( < I_HEADING5_START > | < D_HEADING5_START > )
+        (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING5_END } )
+            (
+                {
+                    this.visitor.headingStart(EHeader.LEVEL5);
+                }
+                line()
+                {
+                    this.visitor.headingEnd();
+                }
+            )
+          | (
+                {
+                    this.visitor.onSpecialSymbol("=====");
+                }
+                paragraph()
+            )
+        )
+    )
+  | (
+        ( < I_HEADING6_START > | < D_HEADING6_START > )
+        (LOOKAHEAD( line(), { jj_scanpos.kind == D_HEADING6_END } )
+            (
+                {
+                    this.visitor.headingStart(EHeader.LEVEL6);
+                }
+                line()
+                {
+                    this.visitor.headingEnd();
+                }
+            )
+          | (
+                {
+                    this.visitor.onSpecialSymbol("======");
+                }
+                paragraph()
+            )
+        )
+    )
+}
+
+void codeText() :
+{
+    Token tmp;
+}
+{
+    ( < I_CODETEXT_START > | < D_CODETEXT_START > )
+    (
+        (
+            tmp = < CODETEXT >
+            {
+                this.visitor.code(tmp.image);
+            }
+        )
+    )
+}
+
+void codeTextEmbedded() :
+{
+    Token tmp;
+}
+{
+    ( < D_CODETEXTEMBEDDED_START > )
+    (
+        (
+            tmp = < CODETEXTEMBEDDED >
+            {
+                this.visitor.codeEmbedded(tmp.image);
+            }
+        )
+    )
+}
+
+void textDivider() :
+{
+}
+{
+    ( < I_TEXT_DIVIDER > | < D_TEXT_DIVIDER > )
+    {
+        this.visitor.onDivider();
+    }
+}
+
+void parseTextListEntries() :
+{
+}
+{
+    ( ( LOOKAHEAD(2) parseTextListEntry() )+ )
+    {
+        this.visitor.listEntriesEnd();
+    }
+}
+
+/**
+ * Reads one list entry.
+ */
+void parseTextListEntry() :
+{
+    Token tmp;
+}
+{
+    (
+        (
+            ( tmp = < I_TEXT_LISTBULLETED_ENTRY > )
+            {
+                this.visitor.listEntryStart(tmp.image, false);
+            }
+        )
+      | (
+            ( tmp = < I_TEXT_LISTNUMBERED_ENTRY > )
+            {
+                this.visitor.listEntryStart(tmp.image, true);
+            }
+        )
+      | (
+            ( tmp = < D_TEXT_LISTBULLETED_ENTRY > )
+            {
+                this.visitor.listEntryStart(tmp.image.substring(1), false);
+            }
+        )
+      | (
+            ( tmp = < D_TEXT_LISTNUMBERED_ENTRY > )
+            {
+                this.visitor.listEntryStart(tmp.image.substring(1), true);
+            }
+        )
+    )
+    line()
+}
+
+
+void paragraph() :
+{
+}
+{
+    line()
+    ( LOOKAHEAD(2)
+        < NEWLINE >
+        {
+            this.visitor.newLine();
+        }
+        line()
+    )*
+}
+
+void emptyParagraph() :
+{
+    this.visitor.newParagraph();
+}
+{
+    < NEWLINE > ( LOOKAHEAD(2) < NEWLINE > )*
+}
+
+void line() :
+{
+    Token tmp;
+//    System.out.println("new line");
+}
+{
+    ( LOOKAHEAD(2)
+        (
+            xmlCode()
+          | xmlTableOfContents()
+          | codeTextEmbedded()
+          | textLinkSquaredBracket()
+          | textTableEntry()
+          | (
+                ( < I_XML_PARAGRAPH_START > | < D_XML_PARAGRAPH_START > )
+                {
+                    this.visitor.newParagraphHtml();
+                }
+            )
+          | (
+                ( < D_XML_PARAGRAPH_END > )
+            )
+          | (
+                ( ( tmp = < I_TEXT_IMAGE > ) | ( tmp = < D_TEXT_IMAGE > ) )
+                {
+                    this.visitor.onImage(tmp.image);
+                }
+            )
+          | (
+                ( ( tmp = < I_TEXT_EXTERNALLINK > ) | ( tmp = < D_TEXT_EXTERNALLINK > ) )
+                {
+                    this.visitor.onExternalLinkText(tmp.image);
+                }
+            )
+          | (
+                < D_TEXT_TYPEFACE_BOLD >
+                {
+                    this.visitor.onTypeface(ETypeface.BOLD);
+                }
+            )
+          | (
+                < D_TEXT_TYPEFACE_ITALIC >
+                {
+                    this.visitor.onTypeface(ETypeface.ITALIC);
+                }
+            )
+          | (
+                < D_SPACE >
+                {
+                    this.visitor.space();
+                }
+            )
+          | (
+                ( ( tmp = < I_WORD > ) | ( tmp = < D_WORD > )
+                | ( tmp = < D_XML_TOC_MAXDEPTH >) )
+                {
+                    this.visitor.word(tmp.image);
+                }
+            )
+          | (
+                ( ( tmp = < I_SPECIAL_SYMBOL > ) | ( tmp = < D_SPECIAL_SYMBOL > )
+                | ( tmp = < D_APOSTROPHE > )
+                | ( tmp = < D_HEADING1_END > ) | ( tmp = < D_HEADING2_END > ) | ( tmp = < D_HEADING3_END > )
+                | ( tmp = < D_HEADING4_END > ) | ( tmp = < D_HEADING5_END > ) | ( tmp = < D_HEADING6_END > ) )
+                {
+                    this.visitor.onSpecialSymbol(tmp.image);
+                }
+            )
+        )
+    )+
+}
+
+/**
+ * Reads the link defined in squared brackets.
+ */
+void textLinkSquaredBracket() :
+{
+    Token tmp;
+    Token linkUrlToken = null;
+    Token linkInternalToken = null;
+    final StringBuilder linkText = new StringBuilder();
+}
+{
+    ( < I_LINKSTARTTEXT > | < D_LINKSTARTTEXT > )
+    ( (linkUrlToken = <LINK_URL>) | (linkInternalToken = <LINK_INTERNAL>) )
+    ( ( tmp = < LINK_TEXT > { linkText.append(tmp.image);} ) | ( tmp = < LINK_INTERNAL >) { linkText.append(tmp.image); } )*
+    < LINK_END >
+    {
+        if (linkUrlToken != null)  {
+            this.visitor.onLink(linkUrlToken.image, linkText.toString());
+        } else  {
+            this.visitor.onInternalLink(linkInternalToken.image, linkText.toString());
+        }
+    }
+}
+
+/**
+ * Parses a table which starts with '||' in a new row.
+ */
+void textTableStart() :
+{
+}
+{
+    (
+        ( < I_TEXT_TABLE_STARTROW > | < D_TEXT_TABLE_STARTROW > )
+        {
+            this.visitor.newTableRow();
+        }
+    )
+    // TODO: next line should work, but does not work
+    // line()
+}
+
+/**
+ * Reads the text of a table entry ('||') within a line.
+ */
+void textTableEntry() :
+{
+}
+{
+    (
+        ( < D_TEXT_TABLE_ENTRY > )
+        {
+            this.visitor.newTableEntry();
+        }
+    )
+}
+
+/**
+ * Parses a code defintion in HTML syntax.
+ */
+void xmlCode() :
+{
+    Token tmp;
+}
+{
+    ( < I_XML_CODE_START > | < D_XML_CODE_START > )
+    (
+        (
+            tmp = < XMLCODE >
+            {
+                this.visitor.code(tmp.image);
+            }
+        )
+    )
+}
+
+/**
+ * Parses a table of contents definition.
+ */
+void xmlTableOfContents() :
+{
+    Token tmp;
+}
+{
+    ( < I_XML_TOC_START > | < D_XML_TOC_START > )
+    ( < D_SPACE > )+
+    ( < D_XML_TOC_MAXDEPTH > )
+    ( tmp = < D_WORD > )
+    ( < D_APOSTROPHE > )
+    ( < D_SPACE > )*
+    ( "/>" )
+    {
+        this.visitor.onToC(tmp.image);
+    }
+}
+
+/*
+private boolean parseHTMLCode(final Paragraph _para) :
+{
+    token_source.SwitchTo(INITIAL_CONTEXT);
+
+    Token tmp;
+    boolean ret = false;
+System.out.println("parseHTMLCode");
+final StringBuilder str = new StringBuilder();
+}
+{
+    (
+      | (< HTML_LISTSTART >
+            ( ( tmp = < HTML_TEXT > {str.append(tmp.image);} ) | ( < NEWLINE > {str.append(' ');} ) )*
+            {
+                if (!"".equals(str.toString()))  {
+_para.add(new Text(str));
+str.delete(0, str.length());
+                }
+                final ListBulleted listBulleted = new ListBulleted();
+            }
+            (
+                < HTML_LISTITEMSTART >
+                    {
+                        final ListBulletedEntry entry = new ListBulletedEntry();
+                        final Paragraph para = new Paragraph();
+                    }
+                    parseHTMLCode(para)
+                    {
+                        entry.add(para);
+                        listBulleted.add(entry);
+                    }
+                < HTML_LISTITEMEND >
+            )*
+            {
+                _para.add(listBulleted);
+            }
+            < HTML_LISTEND >
+        )
+      | ( tmp = < HTML_SEPARATOR >
+            {
+                str.append(tmp.image);
+            }
+        )
+      | ( tmp = < HTML_TEXT >
+            {
+                str.append(tmp.image);
+            }
+        )
+    )*
+}
+*/
+

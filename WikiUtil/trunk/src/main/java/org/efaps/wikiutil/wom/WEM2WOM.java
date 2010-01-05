@@ -160,17 +160,14 @@ public class WEM2WOM
 
     public void documentStart()
     {
-        System.out.println("documentStart");
     }
 
     public void documentEnd()
     {
-        System.out.println("documentEnd");
     }
 
     public void sectionStart()
     {
-System.out.println("sectionStart=" + (this.sections.size() + 1));
         final Section section = new Section();
         if (this.sections.isEmpty())  {
             this.page.addSubSection(section);
@@ -182,25 +179,21 @@ System.out.println("sectionStart=" + (this.sections.size() + 1));
 
     public void sectionEnd()
     {
-        System.out.println("sectionEnd=" + (this.sections.size()));
         this.sections.pop();
     }
 
     public void headingStart()
     {
-        System.out.println("headingStart");
         this.inHeader = true;
     }
 
     public void headingEnd()
     {
-        System.out.println("headingEnd");
         this.inHeader = false;
     }
 
     public void paragraphStart()
     {
-        System.out.println("paragraphStart");
         if (!this.listDefis.isEmpty())  {
             final Paragraph para = new Paragraph();
             this.listDefis.peek().lastEntry().add(para);
@@ -219,7 +212,6 @@ System.out.println("sectionStart=" + (this.sections.size() + 1));
 
     public void paragraphEnd()
     {
-        System.out.println("paragraphEnd");
     }
 
     /**
@@ -227,7 +219,6 @@ System.out.println("sectionStart=" + (this.sections.size() + 1));
      */
     public void tableStart()
     {
-        System.out.println("tableStart");
         this.table = new Table();
         this.add(this.table);
     }
@@ -237,7 +228,6 @@ System.out.println("sectionStart=" + (this.sections.size() + 1));
      */
     public void tableEnd()
     {
-        System.out.println("tableEnd");
         this.table = null;
     }
 
@@ -246,7 +236,6 @@ System.out.println("sectionStart=" + (this.sections.size() + 1));
      */
     public void tableBodyStart()
     {
-        System.out.println("tableBodyStart");
     }
 
     /**
@@ -254,7 +243,6 @@ System.out.println("sectionStart=" + (this.sections.size() + 1));
      */
     public void tableBodyEnd()
     {
-        System.out.println("tableBodyEnd");
     }
 
     /**
@@ -262,7 +250,6 @@ System.out.println("sectionStart=" + (this.sections.size() + 1));
      */
     public void tableRowStart()
     {
-        System.out.println("tableRowStart");
         this.tableRow = new TableRow();
         this.table.addBodyRow(this.tableRow);
     }
@@ -272,7 +259,6 @@ System.out.println("sectionStart=" + (this.sections.size() + 1));
      */
     public void tableRowEnd()
     {
-        System.out.println("tableRowEnd");
         this.tableRow = null;
     }
 
@@ -281,7 +267,6 @@ System.out.println("sectionStart=" + (this.sections.size() + 1));
      */
     public void tableEntryStart()
     {
-        System.out.println("tableEntryStart");
         this.tableEntry = new TableCell();
         this.tableRow.add(this.tableEntry);
     }
@@ -291,14 +276,12 @@ System.out.println("sectionStart=" + (this.sections.size() + 1));
      */
     public void tableEntryEnd()
     {
-        System.out.println("tableEntryEnd");
         this.tableEntry = null;
         this.tableEntryParagraph = null;
     }
 
     public void typefaceStart(final ETypeface _typeface)
     {
-        System.out.println("typefaceStart=" + _typeface);
         switch (_typeface)  {
             case BOLD:
                 final TypefaceBold bold = new TypefaceBold();
@@ -322,13 +305,11 @@ System.out.println("sectionStart=" + (this.sections.size() + 1));
 
     public void typefaceEnd()
     {
-        System.out.println("typefaceEnd");
         this.typeFaces.pop();
     }
 
     public void listBulletedStart()
     {
-        System.out.println("listBulletedStart");
         final ListBulleted listDefi = new ListBulleted();
         this.add(listDefi);
         this.listDefis.add(listDefi);
@@ -336,13 +317,11 @@ System.out.println("sectionStart=" + (this.sections.size() + 1));
 
     public void listBulletedEnd()
     {
-        System.out.println("listBulletedEnd");
         this.listDefis.pop();
     }
 
     public void listNumberedStart()
     {
-        System.out.println("listNumberedStart");
         final ListNumbered listDefi = new ListNumbered();
         this.add(listDefi);
         this.listDefis.add(listDefi);
@@ -350,48 +329,40 @@ System.out.println("sectionStart=" + (this.sections.size() + 1));
 
     public void listNumberedEnd()
     {
-        System.out.println("listNumberedEnd");
         this.listDefis.pop();
     }
 
     public void listEntryStart()
     {
-        System.out.println("listEntryStart");
         this.listDefis.peek().add(new ListEntry());
     }
 
     public void listEntryEnd()
     {
-        System.out.println("listEntryEnd");
     }
 
     public void onDivider()
     {
-        System.out.println("onDivider");
         this.add(new Divider());
     }
 
     public void onImage(final URL _url)
     {
-        System.out.println("onImage="+_url);
         this.add(new Image(_url));
     }
 
     public void onPreformat(final CharSequence _text)
     {
-        System.out.println("onPreformat="+_text);
         this.paragraph.add(new Preformat(_text));
     }
 
     public void onText(final CharSequence _text)
     {
-        System.out.println("onText="+_text);
         this.add(new TextString(_text));
     }
 
     public void onTableOfContents(final int _deepth)
     {
-        System.out.println("onTableOfContents="+_deepth);
         this.add(new TableOfContents(_deepth));
     }
 
@@ -399,7 +370,6 @@ System.out.println("sectionStart=" + (this.sections.size() + 1));
     public void onLinkExternal(final URL _url,
                                final CharSequence _description)
     {
-        System.out.println("onLinkExternal="+_url+"(description="+_description+")");
         if ((_description != null) && !"".equals(_description))  {
             this.add(new ExternalLinkWithDescription(_url, _description));
         } else  {
@@ -410,7 +380,6 @@ System.out.println("sectionStart=" + (this.sections.size() + 1));
     public void onLinkInternal(final CharSequence _link,
                                final CharSequence _description)
     {
-        System.out.println("onLinkInternal="+_link+"(description="+_description+")");
         if ((_description != null) && !"".equals(_description))  {
             this.add(new InternalLinkWithDescription(_link, _description));
         } else  {

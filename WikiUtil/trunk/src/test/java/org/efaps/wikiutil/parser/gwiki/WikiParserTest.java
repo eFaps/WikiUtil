@@ -25,6 +25,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.efaps.wikiutil.parser.gwiki.javacc.ParseException;
+import org.efaps.wikiutil.wem.WEMDebug;
+import org.efaps.wikiutil.wom.WEM2WOM;
 import org.efaps.wikiutil.wom.WikiPage;
 import org.efaps.wikiutil.wom.element.AbstractLineElement;
 import org.efaps.wikiutil.wom.element.AbstractParagraphList;
@@ -1715,7 +1717,9 @@ public class WikiParserTest
     private WikiPage getPage(final String _wikiCode)
         throws ParseException
     {
-        return GWikiParser.parse(new StringReader(_wikiCode));
+        final WEM2WOM wem = new WEM2WOM();
+        GWikiParser.parse(new WEMDebug(System.out, wem), new StringReader(_wikiCode));
+        return wem.getPage();
     }
 
     /**

@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2009 The eFaps Team
+ * Copyright 2003 - 2010 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@
  * Last Changed By: $Author$
  */
 
-package org.efaps.wikiutil.parser.googlecode;
+package org.efaps.wikiutil.parser.gwiki;
 
 import java.io.StringReader;
 import java.net.MalformedURLException;
@@ -54,7 +54,6 @@ import org.efaps.wikiutil.page.property.Label;
 import org.efaps.wikiutil.page.property.Sidebar;
 import org.efaps.wikiutil.page.property.Summary;
 import org.efaps.wikiutil.parser.gwiki.javacc.ParseException;
-import org.efaps.wikiutil.parser.gwiki.javacc.WikiParser;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -1703,8 +1702,7 @@ public class WikiParserTest
                         + "modification of the command is for the developer than very easy. If then the command is "
                         + "deployed the existing command in MX is updated to the new target description in the "
                         + "file.\n");
-        final WikiParser parser = new WikiParser(reader);
-        parser.parse();
+        GWikiParser.parse(reader);
     }
 
     /**
@@ -1717,8 +1715,7 @@ public class WikiParserTest
     private WikiPage getPage(final String _wikiCode)
         throws ParseException
     {
-        final WikiParser parser = new WikiParser(new StringReader(_wikiCode));
-        return parser.parse();
+        return GWikiParser.parse(new StringReader(_wikiCode));
     }
 
     /**
@@ -1730,7 +1727,6 @@ public class WikiParserTest
     private void checkPage(final WikiPage _page,
                            final WikiPage _compare)
     {
-System.out.println("_page="+_page);
         Assert.assertEquals(_page.getProperties().size(),
                             _compare.getProperties().size(),
                             "check size of properties");
@@ -1757,73 +1753,14 @@ System.out.println("_page="+_page);
                               _page.getSubSections().get(jdx),
                               _compare.getSubSections().get(jdx));
         }
-/*
-        Assert.assertEquals(_page.getParagraphs().size(),
-                            _compare.getParagraphs().size(),
-                            "compare size (" + _page.getParagraphs() + ")");
-        for (int idx = 0; idx < _page.getParagraphs().size(); idx++)  {
-            final Paragraph pageElem = _page.getParagraphs().get(idx);
-            final Paragraph compElem = _compare.getParagraphs().get(idx);
-
-            Assert.assertEquals(pageElem.getClass(),
-                                compElem.getClass(),
-                                "check classes for element " + idx + " (" + pageElem + ")");
-
-            } else if (pageElem instanceof Heading2)  {
-                this.checkPageTextLine(idx, (Heading2) pageElem, (Heading2) compElem);
-            } else if (pageElem instanceof Heading3)  {
-                this.checkPageTextLine(idx, (Heading3) pageElem, (Heading3) compElem);
-            } else if (pageElem instanceof Heading4)  {
-                this.checkPageTextLine(idx, (Heading4) pageElem, (Heading4) compElem);
-            } else if (pageElem instanceof Heading5)  {
-                this.checkPageTextLine(idx, (Heading5) pageElem, (Heading5) compElem);
-            } else if (pageElem instanceof Heading6)  {
-                this.checkPageTextLine(idx, (Heading6) pageElem, (Heading6) compElem);
-            } else if (pageElem instanceof ListBulleted)  {
-                Assert.assertEquals(((ListBulleted) pageElem).getEntries().size(),
-                                    ((ListBulleted) compElem).getEntries().size(),
-                                    "same # of entries for bulleted list element " + idx);
-                for (int jdx = 0; jdx < ((ListBulleted) pageElem).getEntries().size(); jdx++)  {
-                    this.checkPageListEntry(idx,
-                                            ((ListBulleted) pageElem).getEntries().get(jdx),
-                                            ((ListBulleted) compElem).getEntries().get(jdx));
-                }
-            } else if (pageElem instanceof ListNumbered)  {
-                Assert.assertEquals(((ListNumbered) pageElem).getEntries().size(),
-                                    ((ListNumbered) compElem).getEntries().size(),
-                                    "same # of entries for bulleted list element " + idx);
-                for (int jdx = 0; jdx < ((ListNumbered) pageElem).getEntries().size(); jdx++)  {
-                    this.checkPageListEntry(idx,
-                                            ((ListNumbered) pageElem).getEntries().get(jdx),
-                                            ((ListNumbered) compElem).getEntries().get(jdx));
-                }
-            } else if (pageElem instanceof TableOfContents)  {
-                Assert.assertEquals(((TableOfContents) pageElem).getMaxDepth(),
-                                    ((TableOfContents) compElem).getMaxDepth(),
-                                    "check table of contents for element " + idx);
-            } else if (pageElem instanceof Table)  {
-                Assert.assertEquals(((Table) pageElem).getRows().size(),
-                                    ((Table) compElem).getRows().size(),
-                                    "same # of rows for table element " + idx);
-                for (int jdx = 0; jdx < ((Table) pageElem).getRows().size(); jdx++)  {
-                    final TableRow pageRow = ((Table) pageElem).getRows().get(jdx);
-                    final TableRow compRow = ((Table) compElem).getRows().get(jdx);
-                    Assert.assertEquals(pageRow.getEntries().size(),
-                                        compRow.getEntries().size(),
-                                        "same # of entries for table row element " + jdx + " of table " + idx);
-                    for (int kdx = 0; kdx < pageRow.getEntries().size(); kdx++)  {
-                        this.checkPageTextLine(jdx,
-                                               pageRow.getEntries().get(kdx),
-                                               compRow.getEntries().get(kdx));
-                    }
-                }
-            } else if (!(pageElem instanceof Divider)) {
-                throw new Error("unknown class " + pageElem.getClass());
-            }
-        }
-        */
     }
 
+    /**
+     *
+     * @param _path         current checked path
+     * @param _pageSection  section of the original page to check
+     * @param _compSection  expected section values
+     */
     private void checkSection(final String _path,
                               final Section _pageSection,
                               final Section _compSection)
@@ -1854,7 +1791,7 @@ System.out.println("_page="+_page);
      * Checks that the <code>_pageTextLine</code> is equal to the
      * <code>_compTextLine</code>.
      *
-     * @param _idx          idx to test (used for logging)
+     * @param _path         current checked path
      * @param _pageTextLine text line from the original page
      * @param _compTextLine expected text line
      */
@@ -1883,6 +1820,12 @@ System.out.println("_page="+_page);
         }
     }
 
+    /**
+     *
+     * @param _path         current checked path
+     * @param _pageElem     element from the original page
+     * @param _compElem     expected element
+     */
     private void checkLineElement(final String _path,
                                   final AbstractLineElement _pageElem,
                                   final AbstractLineElement _compElem)
@@ -1968,6 +1911,5 @@ System.out.println("_page="+_page);
         } else if (!(_pageElem instanceof Divider)) {
             throw new Error("unknown class " + _pageElem.getClass());
         }
-
     }
 }

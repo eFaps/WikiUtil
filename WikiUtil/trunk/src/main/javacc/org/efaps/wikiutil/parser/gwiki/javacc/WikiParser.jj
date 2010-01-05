@@ -30,10 +30,8 @@ options {
 PARSER_BEGIN(WikiParser)
 package org.efaps.wikiutil.parser.gwiki.javacc;
 
-import org.efaps.wikiutil.page.WikiPage;
 import org.efaps.wikiutil.parser.EProperty;
 import org.efaps.wikiutil.parser.ETypeface;
-import org.efaps.wikiutil.parser.WEM2WOM;
 import org.efaps.wikiutil.parser.gwiki.EHeader;
 import org.efaps.wikiutil.parser.gwiki.GWikiVisitor;
 
@@ -308,11 +306,15 @@ PARSER_END(WikiParser)
 ////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////// Parser
 
-public WikiPage parse() :
+/**
+ * Parse current stream into given <code>_visitor</code> class.
+ *
+ * @param _visitor  google Wiki visitor class
+ */
+public void parse(final GWikiVisitor _visitor) :
 {
+    this.visitor = _visitor;
     token_source.SwitchTo(INITIAL_CONTEXT);
-    final WEM2WOM wem2wom = new WEM2WOM();
-    this.visitor = new GWikiVisitor(wem2wom);
 }
 {
     {
@@ -322,7 +324,6 @@ public WikiPage parse() :
     < EOF >
     {
         this.visitor.documentEnd();
-        return wem2wom.getPage();
     }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2009 The eFaps Team
+ * Copyright 2003 - 2010 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +41,8 @@ import org.efaps.wikiutil.page.element.list.ListEntry;
 import org.efaps.wikiutil.page.element.list.ListNumbered;
 import org.efaps.wikiutil.page.element.text.AbstractInternalLink;
 import org.efaps.wikiutil.page.element.text.InternalLinkWithDescription;
+import org.efaps.wikiutil.parser.gwiki.GWikiParser;
 import org.efaps.wikiutil.parser.gwiki.javacc.ParseException;
-import org.efaps.wikiutil.parser.gwiki.javacc.WikiParser;
 
 /**
  * Uses an index page with bulleted or numbered lists (and sub lists) and
@@ -108,8 +108,7 @@ public class WikiIndex2Tex
         this.tempDir = _tempDir;
         this.root = _root.toURL();
         this.wikiExtension = _wikiExtension;
-        final WikiParser parser = new WikiParser(new URL(this.root, _index + this.wikiExtension).openStream());
-        final WikiPage page = parser.parse();
+        final WikiPage page = GWikiParser.parse(new URL(this.root, _index + this.wikiExtension).openStream(), "UTF8");
         AbstractListEntry<?> tmp = null;
         for (final Paragraph para : page.getParagraphs())  {
             for (final AbstractLineElement elem : para.getElements())  {

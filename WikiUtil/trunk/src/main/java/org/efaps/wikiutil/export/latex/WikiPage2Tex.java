@@ -31,28 +31,28 @@ import java.net.URI;
 import java.net.URL;
 
 import org.apache.commons.io.IOUtils;
-import org.efaps.wikiutil.page.WikiPage;
-import org.efaps.wikiutil.page.element.AbstractLineElement;
-import org.efaps.wikiutil.page.element.AbstractParagraphList;
-import org.efaps.wikiutil.page.element.Paragraph;
-import org.efaps.wikiutil.page.element.Preformat;
-import org.efaps.wikiutil.page.element.Section;
-import org.efaps.wikiutil.page.element.list.ListBulleted;
-import org.efaps.wikiutil.page.element.list.ListEntry;
-import org.efaps.wikiutil.page.element.table.Table;
-import org.efaps.wikiutil.page.element.table.TableCell;
-import org.efaps.wikiutil.page.element.table.TableRow;
-import org.efaps.wikiutil.page.element.text.ExternalLink;
-import org.efaps.wikiutil.page.element.text.ExternalLinkWithDescription;
-import org.efaps.wikiutil.page.element.text.Image;
-import org.efaps.wikiutil.page.element.text.InternalLink;
-import org.efaps.wikiutil.page.element.text.InternalLinkWithDescription;
-import org.efaps.wikiutil.page.element.text.TextString;
-import org.efaps.wikiutil.page.element.text.TypefaceBold;
-import org.efaps.wikiutil.page.element.text.TypefaceCode;
-import org.efaps.wikiutil.page.element.text.TypefaceItalic;
 import org.efaps.wikiutil.parser.gwiki.GWikiParser;
 import org.efaps.wikiutil.parser.gwiki.javacc.ParseException;
+import org.efaps.wikiutil.wom.WikiPage;
+import org.efaps.wikiutil.wom.element.AbstractLineElement;
+import org.efaps.wikiutil.wom.element.AbstractParagraphList;
+import org.efaps.wikiutil.wom.element.Paragraph;
+import org.efaps.wikiutil.wom.element.Preformat;
+import org.efaps.wikiutil.wom.element.Section;
+import org.efaps.wikiutil.wom.element.list.ListBulleted;
+import org.efaps.wikiutil.wom.element.list.ListEntry;
+import org.efaps.wikiutil.wom.element.table.Table;
+import org.efaps.wikiutil.wom.element.table.TableCell;
+import org.efaps.wikiutil.wom.element.table.TableRow;
+import org.efaps.wikiutil.wom.element.text.ExternalLink;
+import org.efaps.wikiutil.wom.element.text.ExternalLinkWithDescription;
+import org.efaps.wikiutil.wom.element.text.Image;
+import org.efaps.wikiutil.wom.element.text.InternalLink;
+import org.efaps.wikiutil.wom.element.text.InternalLinkWithDescription;
+import org.efaps.wikiutil.wom.element.text.TextString;
+import org.efaps.wikiutil.wom.element.text.TypefaceBold;
+import org.efaps.wikiutil.wom.element.text.TypefaceCode;
+import org.efaps.wikiutil.wom.element.text.TypefaceItalic;
 
 /**
  * Converts one Wiki page to a Latex file.

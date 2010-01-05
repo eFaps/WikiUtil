@@ -25,9 +25,9 @@ import java.net.URL;
 import java.util.Stack;
 
 import org.apache.commons.lang.StringUtils;
-import org.efaps.wikiutil.parser.EProperty;
-import org.efaps.wikiutil.parser.ETypeface;
-import org.efaps.wikiutil.parser.IWikiEventModel;
+import org.efaps.wikiutil.wem.EProperty;
+import org.efaps.wikiutil.wem.ETypeface;
+import org.efaps.wikiutil.wem.IWikiEventModel;
 
 /**
  *

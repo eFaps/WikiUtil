@@ -23,11 +23,11 @@ package org.efaps.wikiutil.parser.gwiki;
 import java.io.InputStream;
 import java.io.Reader;
 
-import org.efaps.wikiutil.page.WikiPage;
-import org.efaps.wikiutil.parser.IWikiEventModel;
-import org.efaps.wikiutil.parser.WEM2WOM;
 import org.efaps.wikiutil.parser.gwiki.javacc.ParseException;
 import org.efaps.wikiutil.parser.gwiki.javacc.WikiParser;
+import org.efaps.wikiutil.wem.IWikiEventModel;
+import org.efaps.wikiutil.wom.WEM2WOM;
+import org.efaps.wikiutil.wom.WikiPage;
 
 /**
  * Google Wiki parser utility class to parse Wiki stream in Google Code style.

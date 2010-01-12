@@ -25,6 +25,7 @@ import java.net.URL;
 import java.util.Stack;
 
 import org.apache.commons.lang.StringUtils;
+
 import org.efaps.wikiutil.wem.EProperty;
 import org.efaps.wikiutil.wem.ETypeface;
 import org.efaps.wikiutil.wem.IWikiEventModel;
@@ -143,10 +144,10 @@ public class GWikiVisitor
 
     public void documentEnd()
     {
-        this.makeEndTable();
-        this.makeEndText(false);
+        makeEndTable();
+        makeEndText(false);
         if (this.heading != null)  {
-            this.headingEnd();
+            headingEnd();
         }
         if (this.paragraphStarted)  {
             this.wem.paragraphEnd();
@@ -161,7 +162,7 @@ public class GWikiVisitor
 
     public void headingStart(final EHeader _heading)
     {
-        this.makeEndText(false);
+        makeEndText(false);
         if (this.paragraphStarted)  {
             this.wem.paragraphEnd();
             this.paragraphStarted = false;
@@ -169,13 +170,13 @@ public class GWikiVisitor
 
         if (this.heading != null)  {
             if (!this.headingStarted)  {
-                this.wem.headingStart();
+                this.wem.headingStart(_heading);
                 if (this.text != null)  {
                     this.wem.onText(this.text.subSequence(0, this.text.length() - 1).toString().trim());
                     this.text = null;
                 }
             }
-            this.wem.headingEnd();
+            this.wem.headingEnd(_heading);
             this.headingStarted = false;
         }
 
@@ -193,7 +194,7 @@ public class GWikiVisitor
 
         this.section = _heading;
         this.wem.sectionStart();
-        this.wem.headingStart();
+        this.wem.headingStart(_heading);
         this.heading = _heading;
         this.headingStarted = true;
     }
@@ -228,7 +229,7 @@ public class GWikiVisitor
                 this.wem.onText(curText);
             }
             this.text = null;
-            this.wem.headingEnd();
+            this.wem.headingEnd(this.heading);
         }
         this.headingStarted = false;
         this.heading = null;
@@ -237,9 +238,9 @@ public class GWikiVisitor
     public void code(final String _code)
     {
         if (this.text != null)  {
-            this.makeEndText(false);
+            makeEndText(false);
             if (this.headingStarted)  {
-                this.wem.headingEnd();
+                this.wem.headingEnd(this.heading);
                 this.headingStarted = false;
                 this.heading = null;
             }
@@ -253,10 +254,10 @@ public class GWikiVisitor
 
     public void codeEmbedded(final String _code)
     {
-        this.startTypeface(ETypeface.CODE);
+        startTypeface(ETypeface.CODE);
         this.text = new StringBuilder();
         this.text.append(_code);
-        this.endTypeface(ETypeface.CODE);
+        endTypeface(ETypeface.CODE);
 /*        if (this.paragraph == null)  {
             this.paragraph = new Paragraph();
         }
@@ -280,7 +281,7 @@ public class GWikiVisitor
     {
         final int indt = StringUtils.stripEnd(_listEntryType, " \t").length();
         if (this.listIndent.isEmpty())  {
-            this.makeEndText(true);
+            makeEndText(true);
             this.listIndent.add(indt);
             this.listIsNumb.add(_isNumbered);
             if (_isNumbered)  {
@@ -291,7 +292,7 @@ public class GWikiVisitor
             this.wem.listEntryStart();
             this.wem.paragraphStart();
         } else  {
-            this.makeEndText(false);
+            makeEndText(false);
             final int curSize = this.listIndent.size();
             int parIndt = this.listIndent.peek();
             boolean prevIsNumb = false;
@@ -344,7 +345,7 @@ public class GWikiVisitor
 
     public void listEntriesEnd()
     {
-        this.makeEndText(false);
+        makeEndText(false);
         while (!this.listIndent.isEmpty())  {
             this.listIndent.pop();
             this.wem.paragraphEnd();
@@ -361,9 +362,9 @@ public class GWikiVisitor
     public void onTypeface(final ETypeface _typeface)
     {
         if (this.typefaces.contains(_typeface))  {
-            this.endTypeface(_typeface);
+            endTypeface(_typeface);
         } else  {
-            this.startTypeface(_typeface);
+            startTypeface(_typeface);
         }
     }
 
@@ -372,7 +373,7 @@ public class GWikiVisitor
         if (this.typefaces.contains(_typeface))  {
 System.err.println("type face " + _typeface + " already defined and ignored");
         } else  {
-            this.makeEndText(false);
+            makeEndText(false);
             if (this.tableStarted)  {
                 if (!this.tableEntryStarted)  {
                     this.wem.tableEntryStart();
@@ -393,11 +394,11 @@ System.err.println("type face " + _typeface + " already defined and ignored");
         if (!this.typefaces.contains(_typeface))  {
 System.err.println("type face " + _typeface + " not defined and ignored");
         } else  {
-            this.makeEndText(false);
+            makeEndText(false);
             while (this.typefaces.pop() != _typeface)  {
-                this.wem.typefaceEnd();
+                this.wem.typefaceEnd(_typeface);
             }
-            this.wem.typefaceEnd();
+            this.wem.typefaceEnd(_typeface);
         }
     }
 
@@ -407,8 +408,8 @@ System.err.println("type face " + _typeface + " not defined and ignored");
      */
     public void newParagraph()
     {
-        this.makeEndTable();
-        this.newParagraphHtml();
+        makeEndTable();
+        newParagraphHtml();
     }
 
     /**
@@ -416,7 +417,7 @@ System.err.println("type face " + _typeface + " not defined and ignored");
      */
     public void newParagraphHtml()
     {
-        this.makeEndText(false);
+        makeEndText(false);
         if (this.tableStarted)  {
             if (this.tableEntryParagraphStarted)  {
                 this.wem.paragraphEnd();
@@ -433,7 +434,7 @@ System.err.println("type face " + _typeface + " not defined and ignored");
      */
     public void newTableRow()
     {
-        this.makeEndText(true);
+        makeEndText(true);
         if (this.tableStarted)  {
             this.wem.tableRowEnd();
         } else  {
@@ -452,9 +453,9 @@ System.err.println("type face " + _typeface + " not defined and ignored");
     public void newTableEntry()
     {
         if (!this.tableStarted)  {
-            this.newTableRow();
+            newTableRow();
         } else  {
-            this.makeEndText(false);
+            makeEndText(false);
             this.wem.paragraphEnd();
             this.wem.tableEntryEnd();
             this.tableEntryStarted = false;
@@ -467,7 +468,7 @@ System.err.println("type face " + _typeface + " not defined and ignored");
      */
     public void onDivider()
     {
-        this.makeEndText(true);
+        makeEndText(true);
         this.wem.onDivider();
     }
 
@@ -478,7 +479,7 @@ System.err.println("type face " + _typeface + " not defined and ignored");
      */
     public void onToC(final String _depth)
     {
-        this.makeEndText(true);
+        makeEndText(true);
         Integer depth;
         try  {
             depth = Integer.parseInt(_depth);
@@ -513,10 +514,10 @@ System.err.println("type face " + _typeface + " not defined and ignored");
             } else  {
                 description = null;
             }
-            this.makeEndText(true);
+            makeEndText(true);
             this.wem.onLinkExternal(url, description);
         } catch (final MalformedURLException e)  {
-            this.onInternalLink(_link, _description);
+            onInternalLink(_link, _description);
         }
     }
 
@@ -535,7 +536,7 @@ System.err.println("type face " + _typeface + " not defined and ignored");
         } else  {
             description = null;
         }
-        this.makeEndText(true);
+        makeEndText(true);
         this.wem.onLinkInternal(_link, description);
     }
 
@@ -560,7 +561,7 @@ System.err.println("type face " + _typeface + " not defined and ignored");
             }
             this.text.append(_link);
         } else  {
-            this.makeEndText(true);
+            makeEndText(true);
             this.wem.onLinkExternal(url, null);
         }
     }
@@ -579,7 +580,7 @@ System.err.println("type face " + _typeface + " not defined and ignored");
             }
             this.text.append(_image);
         } else  {
-            this.makeEndText(true);
+            makeEndText(true);
             this.wem.onImage(url);
         }
     }
@@ -592,7 +593,7 @@ System.err.println("type face " + _typeface + " not defined and ignored");
     public void newLine()
     {
         if (this.tableStarted)  {
-            this.makeEndTable();
+            makeEndTable();
         } else  {
             if (this.text == null)  {
                 this.text = new StringBuilder();
@@ -667,7 +668,7 @@ System.err.println("type face " + _typeface + " not defined and ignored");
     protected void makeEndTable()
     {
         if (this.tableStarted)  {
-            this.makeEndText(false);
+            makeEndText(false);
             if (this.tableEntryStarted)  {
                 this.wem.paragraphEnd();
                 this.wem.tableEntryEnd();

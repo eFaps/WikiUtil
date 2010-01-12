@@ -23,6 +23,8 @@ package org.efaps.wikiutil.wem;
 import java.io.PrintStream;
 import java.net.URL;
 
+import org.efaps.wikiutil.parser.gwiki.EHeader;
+
 /**
  * Wiki Event Manager which could be used for debugging purposes. Two modes
  * exists. If {@link  WEMDebug#wem} is defined (and not null) the original Wiki
@@ -97,7 +99,7 @@ public class WEMDebug
     public void onProperty(final EProperty _property,
                            final String _value)
     {
-        this.println("onProperty(" + _property + ", value = " + _value + ")");
+        println("onProperty(" + _property + ", value = " + _value + ")");
         if (this.wem != null)  {
             this.wem.onProperty(_property, _value);
         }
@@ -108,7 +110,7 @@ public class WEMDebug
      */
     public void documentStart()
     {
-        this.println("documentStart");
+        println("documentStart");
         this.indent++;
         if (this.wem != null)  {
             this.wem.documentStart();
@@ -121,7 +123,7 @@ public class WEMDebug
     public void documentEnd()
     {
         this.indent--;
-        this.println("documentEnd");
+        println("documentEnd");
         if (this.wem != null)  {
             this.wem.documentEnd();
         }
@@ -132,7 +134,7 @@ public class WEMDebug
      */
     public void sectionStart()
     {
-        this.println("sectionStart");
+        println("sectionStart");
         this.indent++;
         if (this.wem != null)  {
             this.wem.sectionStart();
@@ -145,7 +147,7 @@ public class WEMDebug
     public void sectionEnd()
     {
         this.indent--;
-        this.println("sectionEnd");
+        println("sectionEnd");
         if (this.wem != null)  {
             this.wem.sectionEnd();
         }
@@ -154,24 +156,24 @@ public class WEMDebug
     /**
      * {@inheritDoc}
      */
-    public void headingStart()
+    public void headingStart(final EHeader _eheader)
     {
-        this.println("headingStart");
+        println("headingStart");
         this.indent++;
         if (this.wem != null)  {
-            this.wem.headingStart();
+            this.wem.headingStart(_eheader);
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    public void headingEnd()
+    public void headingEnd(final EHeader _eheader)
     {
         this.indent--;
-        this.println("headingEnd");
+        println("headingEnd");
         if (this.wem != null)  {
-            this.wem.headingEnd();
+            this.wem.headingEnd(_eheader);
         }
     }
 
@@ -180,7 +182,7 @@ public class WEMDebug
      */
     public void paragraphStart()
     {
-        this.println("paragraphStart");
+        println("paragraphStart");
         this.indent++;
         if (this.wem != null)  {
             this.wem.paragraphStart();
@@ -193,7 +195,7 @@ public class WEMDebug
     public void paragraphEnd()
     {
         this.indent--;
-        this.println("paragraphEnd");
+        println("paragraphEnd");
         if (this.wem != null)  {
             this.wem.paragraphEnd();
         }
@@ -204,7 +206,7 @@ public class WEMDebug
      */
     public void tableStart()
     {
-        this.println("tableStart");
+        println("tableStart");
         this.indent++;
         if (this.wem != null)  {
             this.wem.tableStart();
@@ -217,7 +219,7 @@ public class WEMDebug
     public void tableEnd()
     {
         this.indent--;
-        this.println("tableEnd");
+        println("tableEnd");
         if (this.wem != null)  {
             this.wem.tableEnd();
         }
@@ -228,7 +230,7 @@ public class WEMDebug
      */
     public void tableBodyStart()
     {
-        this.println("tableBodyStart");
+        println("tableBodyStart");
         this.indent++;
         if (this.wem != null)  {
             this.wem.tableBodyStart();
@@ -241,7 +243,7 @@ public class WEMDebug
     public void tableBodyEnd()
     {
         this.indent--;
-        this.println("tableBodyEnd");
+        println("tableBodyEnd");
         if (this.wem != null)  {
             this.wem.tableBodyEnd();
         }
@@ -252,7 +254,7 @@ public class WEMDebug
      */
     public void tableRowStart()
     {
-        this.println("tableRowStart");
+        println("tableRowStart");
         this.indent++;
         if (this.wem != null)  {
             this.wem.tableRowStart();
@@ -265,7 +267,7 @@ public class WEMDebug
     public void tableRowEnd()
     {
         this.indent--;
-        this.println("tableRowEnd");
+        println("tableRowEnd");
         if (this.wem != null)  {
             this.wem.tableRowEnd();
         }
@@ -276,7 +278,7 @@ public class WEMDebug
      */
     public void tableEntryStart()
     {
-        this.println("tableEntryStart");
+        println("tableEntryStart");
         this.indent++;
         if (this.wem != null)  {
             this.wem.tableEntryStart();
@@ -289,7 +291,7 @@ public class WEMDebug
     public void tableEntryEnd()
     {
         this.indent--;
-        this.println("tableEntryEnd");
+        println("tableEntryEnd");
         if (this.wem != null)  {
             this.wem.tableEntryEnd();
         }
@@ -300,7 +302,7 @@ public class WEMDebug
      */
     public void typefaceStart(final ETypeface _typeface)
     {
-        this.println("typefaceStart(" + _typeface + ")");
+        println("typefaceStart(" + _typeface + ")");
         this.indent++;
         if (this.wem != null)  {
             this.wem.typefaceStart(_typeface);
@@ -310,12 +312,12 @@ public class WEMDebug
     /**
      * {@inheritDoc}
      */
-    public void typefaceEnd()
+    public void typefaceEnd(final ETypeface _typeface)
     {
         this.indent--;
-        this.println("typefaceEnd");
+        println("typefaceEnd");
         if (this.wem != null)  {
-            this.wem.typefaceEnd();
+            this.wem.typefaceEnd(_typeface);
         }
     }
 
@@ -324,7 +326,7 @@ public class WEMDebug
      */
     public void listBulletedStart()
     {
-        this.println("listBulletedStart");
+        println("listBulletedStart");
         this.indent++;
         if (this.wem != null)  {
             this.wem.listBulletedStart();
@@ -337,7 +339,7 @@ public class WEMDebug
     public void listBulletedEnd()
     {
         this.indent--;
-        this.println("listBulletedEnd");
+        println("listBulletedEnd");
         if (this.wem != null)  {
             this.wem.listBulletedEnd();
         }
@@ -348,7 +350,7 @@ public class WEMDebug
      */
     public void listNumberedStart()
     {
-        this.println("listNumberedStart");
+        println("listNumberedStart");
         this.indent++;
         if (this.wem != null)  {
             this.wem.listNumberedStart();
@@ -361,7 +363,7 @@ public class WEMDebug
     public void listNumberedEnd()
     {
         this.indent--;
-        this.println("listNumberedEnd");
+        println("listNumberedEnd");
         if (this.wem != null)  {
             this.wem.listNumberedEnd();
         }
@@ -372,7 +374,7 @@ public class WEMDebug
      */
     public void listEntryStart()
     {
-        this.println("listEntryStart");
+        println("listEntryStart");
         this.indent++;
         if (this.wem != null)  {
             this.wem.listEntryStart();
@@ -385,7 +387,7 @@ public class WEMDebug
     public void listEntryEnd()
     {
         this.indent--;
-        this.println("listEntryEnd");
+        println("listEntryEnd");
         if (this.wem != null)  {
             this.wem.listEntryEnd();
         }
@@ -396,7 +398,7 @@ public class WEMDebug
      */
     public void onDivider()
     {
-        this.println("onDivider");
+        println("onDivider");
         if (this.wem != null)  {
             this.wem.onDivider();
         }
@@ -407,7 +409,7 @@ public class WEMDebug
      */
     public void onImage(final URL _url)
     {
-        this.println("onImage(" + _url + ")");
+        println("onImage(" + _url + ")");
         if (this.wem != null)  {
             this.wem.onImage(_url);
         }
@@ -418,7 +420,7 @@ public class WEMDebug
      */
     public void onPreformat(final CharSequence _text)
     {
-        this.println("onPreformat(" + _text + ")");
+        println("onPreformat(" + _text + ")");
         if (this.wem != null)  {
             this.wem.onPreformat(_text);
         }
@@ -429,7 +431,7 @@ public class WEMDebug
      */
     public void onText(final CharSequence _text)
     {
-        this.println("onText(" + _text + ")");
+        println("onText(" + _text + ")");
         if (this.wem != null)  {
             this.wem.onText(_text);
         }
@@ -440,7 +442,7 @@ public class WEMDebug
      */
     public void onTableOfContents(final int _deepth)
     {
-        this.println("onTableOfContents(" + _deepth + ")");
+        println("onTableOfContents(" + _deepth + ")");
         if (this.wem != null)  {
             this.wem.onTableOfContents(_deepth);
         }
@@ -453,7 +455,7 @@ public class WEMDebug
     public void onLinkExternal(final URL _url,
                                final CharSequence _description)
     {
-        this.println("onLinkExternal(" + _url + ", description=" + _description + ")");
+        println("onLinkExternal(" + _url + ", description=" + _description + ")");
         if (this.wem != null)  {
             this.wem.onLinkExternal(_url, _description);
         }
@@ -465,7 +467,7 @@ public class WEMDebug
     public void onLinkInternal(final CharSequence _link,
                                final CharSequence _description)
     {
-        this.println("onLinkInternal(" + _link + ", description=" + _description + ")");
+        println("onLinkInternal(" + _link + ", description=" + _description + ")");
         if (this.wem != null)  {
             this.wem.onLinkInternal(_link, _description);
         }

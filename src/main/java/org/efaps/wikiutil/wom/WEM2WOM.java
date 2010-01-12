@@ -23,6 +23,7 @@ package org.efaps.wikiutil.wom;
 import java.net.URL;
 import java.util.Stack;
 
+import org.efaps.wikiutil.parser.gwiki.EHeader;
 import org.efaps.wikiutil.wem.EProperty;
 import org.efaps.wikiutil.wem.ETypeface;
 import org.efaps.wikiutil.wem.IWikiEventModel;
@@ -182,12 +183,12 @@ public class WEM2WOM
         this.sections.pop();
     }
 
-    public void headingStart()
+    public void headingStart(final EHeader _eheader)
     {
         this.inHeader = true;
     }
 
-    public void headingEnd()
+    public void headingEnd(final EHeader _eheader)
     {
         this.inHeader = false;
     }
@@ -220,7 +221,7 @@ public class WEM2WOM
     public void tableStart()
     {
         this.table = new Table();
-        this.add(this.table);
+        add(this.table);
     }
 
     /**
@@ -285,17 +286,17 @@ public class WEM2WOM
         switch (_typeface)  {
             case BOLD:
                 final TypefaceBold bold = new TypefaceBold();
-                this.add(bold);
+                add(bold);
                 this.typeFaces.push(bold);
                 break;
             case CODE:
                 final TypefaceCode code = new TypefaceCode();
-                this.add(code);
+                add(code);
                 this.typeFaces.push(code);
                 break;
             case ITALIC:
                 final TypefaceItalic italic = new TypefaceItalic();
-                this.add(italic);
+                add(italic);
                 this.typeFaces.push(italic);
                 break;
             default:
@@ -303,7 +304,7 @@ public class WEM2WOM
         }
     }
 
-    public void typefaceEnd()
+    public void typefaceEnd(final ETypeface _typeface)
     {
         this.typeFaces.pop();
     }
@@ -311,7 +312,7 @@ public class WEM2WOM
     public void listBulletedStart()
     {
         final ListBulleted listDefi = new ListBulleted();
-        this.add(listDefi);
+        add(listDefi);
         this.listDefis.add(listDefi);
     }
 
@@ -323,7 +324,7 @@ public class WEM2WOM
     public void listNumberedStart()
     {
         final ListNumbered listDefi = new ListNumbered();
-        this.add(listDefi);
+        add(listDefi);
         this.listDefis.add(listDefi);
     }
 
@@ -343,12 +344,12 @@ public class WEM2WOM
 
     public void onDivider()
     {
-        this.add(new Divider());
+        add(new Divider());
     }
 
     public void onImage(final URL _url)
     {
-        this.add(new Image(_url));
+        add(new Image(_url));
     }
 
     public void onPreformat(final CharSequence _text)
@@ -358,12 +359,12 @@ public class WEM2WOM
 
     public void onText(final CharSequence _text)
     {
-        this.add(new TextString(_text));
+        add(new TextString(_text));
     }
 
     public void onTableOfContents(final int _deepth)
     {
-        this.add(new TableOfContents(_deepth));
+        add(new TableOfContents(_deepth));
     }
 
 
@@ -371,9 +372,9 @@ public class WEM2WOM
                                final CharSequence _description)
     {
         if ((_description != null) && !"".equals(_description))  {
-            this.add(new ExternalLinkWithDescription(_url, _description));
+            add(new ExternalLinkWithDescription(_url, _description));
         } else  {
-            this.add(new ExternalLink(_url));
+            add(new ExternalLink(_url));
         }
     }
 
@@ -381,9 +382,9 @@ public class WEM2WOM
                                final CharSequence _description)
     {
         if ((_description != null) && !"".equals(_description))  {
-            this.add(new InternalLinkWithDescription(_link, _description));
+            add(new InternalLinkWithDescription(_link, _description));
         } else  {
-            this.add(new InternalLink(_link));
+            add(new InternalLink(_link));
         }
     }
 

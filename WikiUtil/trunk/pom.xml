@@ -33,7 +33,7 @@
     ************************************************************************* -->
     <packaging>jar</packaging>
     <groupId>org.efaps</groupId>
-    <artifactId>org.efaps.wikiutil</artifactId>
+    <artifactId>wikiutil</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <url>http://wikiutil.efaps.org</url>
     <licenses>

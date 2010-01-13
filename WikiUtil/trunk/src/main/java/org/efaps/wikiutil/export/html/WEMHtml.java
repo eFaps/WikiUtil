@@ -26,7 +26,6 @@ import java.util.Stack;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import org.efaps.wikiutil.parser.gwiki.EHeader;
 import org.efaps.wikiutil.wem.EProperty;
 import org.efaps.wikiutil.wem.ETypeface;
 import org.efaps.wikiutil.wem.IWikiEventModel;
@@ -67,12 +66,9 @@ public class WEMHtml
     private final IWikiEventModel wem;
 
     /**
-     * Indent of one printed line (increased for start method; decreased for
-     * end methods).
-     *
-     * @see #println(String)
+     * Level of the heading.
      */
-    private int indent = 0;
+    private int headingLevel = 0;
 
     /**
      * Depth of the table of Content.
@@ -124,7 +120,6 @@ public class WEMHtml
     public void documentStart()
     {
         this.bldrs.peek().append("<html><body>");
-        this.indent++;
         if (this.wem != null)  {
             this.wem.documentStart();
         }
@@ -135,7 +130,6 @@ public class WEMHtml
      */
     public void documentEnd()
     {
-        this.indent--;
         if (this.toCBldr != null) {
             this.toCBldr.append("<ul>");
             int level = 1;
@@ -168,8 +162,7 @@ public class WEMHtml
      */
     public void sectionStart()
     {
-        //TODO must there be done something?
-        this.indent++;
+        this.headingLevel++;
         if (this.wem != null)  {
             this.wem.sectionStart();
         }
@@ -180,7 +173,7 @@ public class WEMHtml
      */
     public void sectionEnd()
     {
-        this.indent--;
+        this.headingLevel--;
         if (this.wem != null)  {
             this.wem.sectionEnd();
         }
@@ -189,69 +182,25 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
-    public void headingStart(final EHeader _eheader)
+    public void headingStart()
     {
-        this.toC.push(new ToCEntry(_eheader));
+        this.toC.push(new ToCEntry(this.headingLevel));
         this.heading = true;
-        switch (_eheader) {
-            case LEVEL1:
-                this.bldrs.peek().append("<h1><a name=\"");
-                break;
-            case LEVEL2:
-                this.bldrs.peek().append("<h2><a name=\"");
-                break;
-            case LEVEL3:
-                this.bldrs.peek().append("<h3><a name=\"");
-                break;
-            case LEVEL4:
-                this.bldrs.peek().append("<h4><a name=\"");
-                break;
-            case LEVEL5:
-                this.bldrs.peek().append("<h5><a name=\"");
-                break;
-            case LEVEL6:
-                this.bldrs.peek().append("<h6><a name=\"");
-                break;
-            default:
-                break;
-        }
-        this.indent++;
+        this.bldrs.peek().append("<h").append(this.headingLevel).append("><a name=\"");
         if (this.wem != null)  {
-            this.wem.headingStart(_eheader);
+            this.wem.headingStart();
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    public void headingEnd(final EHeader _eheader)
+    public void headingEnd()
     {
         this.heading = false;
-        this.indent--;
-        switch (_eheader) {
-            case LEVEL1:
-                this.bldrs.peek().append("</a></h1>");
-                break;
-            case LEVEL2:
-                this.bldrs.peek().append("</a></h2>");
-                break;
-            case LEVEL3:
-                this.bldrs.peek().append("</a></h3>");
-                break;
-            case LEVEL4:
-                this.bldrs.peek().append("</a></h4>");
-                break;
-            case LEVEL5:
-                this.bldrs.peek().append("</a></h5>");
-                break;
-            case LEVEL6:
-                this.bldrs.peek().append("</a></h6>");
-                break;
-            default:
-                break;
-        }
+        this.bldrs.peek().append("</a></h").append(this.headingLevel).append(">");
         if (this.wem != null)  {
-            this.wem.headingEnd(_eheader);
+            this.wem.headingEnd();
         }
     }
 
@@ -261,7 +210,6 @@ public class WEMHtml
     public void paragraphStart()
     {
         this.bldrs.peek().append("<p>");
-        this.indent++;
         if (this.wem != null)  {
             this.wem.paragraphStart();
         }
@@ -272,7 +220,6 @@ public class WEMHtml
      */
     public void paragraphEnd()
     {
-        this.indent--;
         this.bldrs.peek().append("</p>");
         if (this.wem != null)  {
             this.wem.paragraphEnd();
@@ -285,7 +232,6 @@ public class WEMHtml
     public void tableStart()
     {
         this.bldrs.peek().append("<table>");
-        this.indent++;
         if (this.wem != null)  {
             this.wem.tableStart();
         }
@@ -296,7 +242,6 @@ public class WEMHtml
      */
     public void tableEnd()
     {
-        this.indent--;
         this.bldrs.peek().append("</table>");
         if (this.wem != null)  {
             this.wem.tableEnd();
@@ -309,7 +254,6 @@ public class WEMHtml
     public void tableBodyStart()
     {
         this.bldrs.peek().append("<tbody>");
-        this.indent++;
         if (this.wem != null)  {
             this.wem.tableBodyStart();
         }
@@ -320,7 +264,6 @@ public class WEMHtml
      */
     public void tableBodyEnd()
     {
-        this.indent--;
         this.bldrs.peek().append("</tbody>");
         if (this.wem != null)  {
             this.wem.tableBodyEnd();
@@ -333,7 +276,6 @@ public class WEMHtml
     public void tableRowStart()
     {
         this.bldrs.peek().append("<tr>");
-        this.indent++;
         if (this.wem != null)  {
             this.wem.tableRowStart();
         }
@@ -344,7 +286,6 @@ public class WEMHtml
      */
     public void tableRowEnd()
     {
-        this.indent--;
         this.bldrs.peek().append("</tr>");
         if (this.wem != null)  {
             this.wem.tableRowEnd();
@@ -357,7 +298,6 @@ public class WEMHtml
     public void tableEntryStart()
     {
         this.bldrs.peek().append("<td>");
-        this.indent++;
         if (this.wem != null)  {
             this.wem.tableEntryStart();
         }
@@ -368,7 +308,6 @@ public class WEMHtml
      */
     public void tableEntryEnd()
     {
-        this.indent--;
         this.bldrs.peek().append("</td>");
         if (this.wem != null)  {
             this.wem.tableEntryEnd();
@@ -402,7 +341,6 @@ public class WEMHtml
             default:
                 break;
         }
-        this.indent++;
         if (this.wem != null)  {
             this.wem.typefaceStart(_typeface);
         }
@@ -413,7 +351,6 @@ public class WEMHtml
      */
     public void typefaceEnd(final ETypeface _typeface)
     {
-        this.indent--;
         this.bldrs.peek().append("</span>");
         if (this.wem != null)  {
             this.wem.typefaceEnd(_typeface);
@@ -426,7 +363,6 @@ public class WEMHtml
     public void listBulletedStart()
     {
         this.bldrs.peek().append("<ul>");
-        this.indent++;
         if (this.wem != null)  {
             this.wem.listBulletedStart();
         }
@@ -437,7 +373,6 @@ public class WEMHtml
      */
     public void listBulletedEnd()
     {
-        this.indent--;
         this.bldrs.peek().append("</ul>");
         if (this.wem != null)  {
             this.wem.listBulletedEnd();
@@ -450,7 +385,6 @@ public class WEMHtml
     public void listNumberedStart()
     {
         this.bldrs.peek().append("<ol>");
-        this.indent++;
         if (this.wem != null)  {
             this.wem.listNumberedStart();
         }
@@ -461,7 +395,6 @@ public class WEMHtml
      */
     public void listNumberedEnd()
     {
-        this.indent--;
         this.bldrs.peek().append("</ol>");
         if (this.wem != null)  {
             this.wem.listNumberedEnd();
@@ -474,7 +407,6 @@ public class WEMHtml
     public void listEntryStart()
     {
         this.bldrs.peek().append("<li>");
-        this.indent++;
         if (this.wem != null)  {
             this.wem.listEntryStart();
         }
@@ -485,7 +417,6 @@ public class WEMHtml
      */
     public void listEntryEnd()
     {
-        this.indent--;
         this.bldrs.peek().append("</li>");
         if (this.wem != null)  {
             this.wem.listEntryEnd();
@@ -609,9 +540,9 @@ public class WEMHtml
     protected class ToCEntry
     {
         /**
-         * EHeader for this entry.
+         * Level of the header.
          */
-        private final EHeader eheader;
+        private final int headerLevel;
 
         /**
          * Value for this entry.
@@ -619,11 +550,11 @@ public class WEMHtml
         private CharSequence value;
 
         /**
-         * @param _eheader EHeader
+         * @param _headerLevel level for the header
          */
-        public ToCEntry(final EHeader _eheader)
+        public ToCEntry(final int _headerLevel)
         {
-            this.eheader = _eheader;
+            this.headerLevel = _headerLevel;
         }
 
         /**
@@ -656,46 +587,12 @@ public class WEMHtml
         }
 
         /**
-         * Getter method for instance variable {@link #eheader}.
-         *
-         * @return value of instance variable {@link #eheader}
-         */
-        public EHeader getEheader()
-        {
-            return this.eheader;
-        }
-
-        /**
          * Get the level of the eheading as primitiv int.
          * @return level of the heading
          */
         public int getLevel()
         {
-            final int ret;
-            switch (this.eheader) {
-                case LEVEL1:
-                    ret = 1;
-                    break;
-                case LEVEL2:
-                    ret = 2;
-                    break;
-                case LEVEL3:
-                    ret = 3;
-                    break;
-                case LEVEL4:
-                    ret = 4;
-                    break;
-                case LEVEL5:
-                    ret = 5;
-                    break;
-                case LEVEL6:
-                    ret = 6;
-                    break;
-                default:
-                    ret = 0;
-                    break;
-            }
-            return ret;
+            return this.headerLevel;
         }
     }
 }

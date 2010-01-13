@@ -170,13 +170,13 @@ public class GWikiVisitor
 
         if (this.heading != null)  {
             if (!this.headingStarted)  {
-                this.wem.headingStart(_heading);
+                this.wem.headingStart();
                 if (this.text != null)  {
                     this.wem.onText(this.text.subSequence(0, this.text.length() - 1).toString().trim());
                     this.text = null;
                 }
             }
-            this.wem.headingEnd(_heading);
+            this.wem.headingEnd();
             this.headingStarted = false;
         }
 
@@ -194,7 +194,7 @@ public class GWikiVisitor
 
         this.section = _heading;
         this.wem.sectionStart();
-        this.wem.headingStart(_heading);
+        this.wem.headingStart();
         this.heading = _heading;
         this.headingStarted = true;
     }
@@ -229,7 +229,7 @@ public class GWikiVisitor
                 this.wem.onText(curText);
             }
             this.text = null;
-            this.wem.headingEnd(this.heading);
+            this.wem.headingEnd();
         }
         this.headingStarted = false;
         this.heading = null;
@@ -240,7 +240,7 @@ public class GWikiVisitor
         if (this.text != null)  {
             makeEndText(false);
             if (this.headingStarted)  {
-                this.wem.headingEnd(this.heading);
+                this.wem.headingEnd();
                 this.headingStarted = false;
                 this.heading = null;
             }

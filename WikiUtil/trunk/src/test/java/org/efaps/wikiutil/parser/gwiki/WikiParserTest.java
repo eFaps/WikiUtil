@@ -1000,6 +1000,38 @@ public class WikiParserTest
     }
 
     /**
+     * Checks that comments ignored.
+     *
+     *
+     * @throws ParseException if parsing of the Wiki text failed
+     */
+    @Test(description = "comment")
+    public void testComment()
+        throws ParseException
+    {
+        this.checkPage(
+                this.getPage("<wiki:comment>\nMy Comment\n</wiki:comment>"),
+                new WikiPage());
+    }
+
+
+    /**
+     * Complex check that comments ignored.
+     *
+     * @throws ParseException if parsing of the Wiki text failed
+     */
+    @Test(description = "complex check that comments ignored")
+    public void testCommentComplex()
+        throws ParseException
+    {
+        this.checkPage(
+                this.getPage("Before Comment <wiki:comment>\nMy Comment\n</wiki:comment>and after Comment"),
+                new WikiPage()
+                    .add(new Paragraph()
+                        .add(new TextString("Before Comment and after Comment"))));
+    }
+
+    /**
      * Checks that code could be parsed.
      *
      * @throws ParseException if parsing of the Wiki text failed

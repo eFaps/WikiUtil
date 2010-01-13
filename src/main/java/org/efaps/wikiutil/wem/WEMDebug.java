@@ -23,8 +23,6 @@ package org.efaps.wikiutil.wem;
 import java.io.PrintStream;
 import java.net.URL;
 
-import org.efaps.wikiutil.parser.gwiki.EHeader;
-
 /**
  * Wiki Event Manager which could be used for debugging purposes. Two modes
  * exists. If {@link  WEMDebug#wem} is defined (and not null) the original Wiki
@@ -156,24 +154,24 @@ public class WEMDebug
     /**
      * {@inheritDoc}
      */
-    public void headingStart(final EHeader _eheader)
+    public void headingStart()
     {
         println("headingStart");
         this.indent++;
         if (this.wem != null)  {
-            this.wem.headingStart(_eheader);
+            this.wem.headingStart();
         }
     }
 
     /**
      * {@inheritDoc}
      */
-    public void headingEnd(final EHeader _eheader)
+    public void headingEnd()
     {
         this.indent--;
         println("headingEnd");
         if (this.wem != null)  {
-            this.wem.headingEnd(_eheader);
+            this.wem.headingEnd();
         }
     }
 

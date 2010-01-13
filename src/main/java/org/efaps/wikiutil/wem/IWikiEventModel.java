@@ -22,8 +22,6 @@ package org.efaps.wikiutil.wem;
 
 import java.net.URL;
 
-import org.efaps.wikiutil.parser.gwiki.EHeader;
-
 
 /**
  * Interface for the Wiki event model.
@@ -64,17 +62,13 @@ public interface IWikiEventModel
 
     /**
      * Start of heading (within a section).
-     *
-     * @param _eheader header that starts
      */
-    void headingStart(final EHeader _eheader);
+    void headingStart();
 
     /**
      * End of heading (within a section).
-     *
-     * @param _eheader header that ends
      */
-    void headingEnd(final EHeader _eheader);
+    void headingEnd();
 
     /**
      * Start of paragraph (within a section or a document).
@@ -135,6 +129,7 @@ public interface IWikiEventModel
 
     /**
      * End of a type face (within a paragraph or a heading).
+     *
      * @param _typeface     type face
      */
     void typefaceEnd(final ETypeface _typeface);

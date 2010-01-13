@@ -23,7 +23,6 @@ package org.efaps.wikiutil.wom;
 import java.net.URL;
 import java.util.Stack;
 
-import org.efaps.wikiutil.parser.gwiki.EHeader;
 import org.efaps.wikiutil.wem.EProperty;
 import org.efaps.wikiutil.wem.ETypeface;
 import org.efaps.wikiutil.wem.IWikiEventModel;
@@ -183,12 +182,12 @@ public class WEM2WOM
         this.sections.pop();
     }
 
-    public void headingStart(final EHeader _eheader)
+    public void headingStart()
     {
         this.inHeader = true;
     }
 
-    public void headingEnd(final EHeader _eheader)
+    public void headingEnd()
     {
         this.inHeader = false;
     }

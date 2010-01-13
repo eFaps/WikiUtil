@@ -82,7 +82,8 @@ PARSER_END(WikiParser)
   | < #TEXT_TABLE_ENTRY: ( ( < SPACE > )* ( "||" ) ( < SPACE > )* ) >
   | < #TEXT_TYPEFACE_ITALIC: ( "_" ) >
 
-  | < #XML_CODE_START: ( "<code>") >
+  | < #XML_CODE_START: ( "<code>" ) >
+  | < #XML_COMMENT_START: ( "<wiki:comment" ) ( < SPACE > )* ( ">" ) >
   | < #XML_PARAGRAPH_START: ( ( "<p" ) ( < SPACE > )* ( ">" ) ) >
   | < #XML_PARAGRAPH_END: ( ( "</p" )  ( < SPACE > )* ( ">" ) ) >
   | < #XML_TOC_START: ( "<wiki:toc" ) >
@@ -140,6 +141,7 @@ PARSER_END(WikiParser)
   | < I_TEXT_TABLE_STARTROW: ( < TEXT_TABLE_ENTRY > ) > : DEFAULT
 
   | < I_XML_CODE_START: ( < XML_CODE_START > ) > : CODEHTML_EXPECTED
+  | < I_XML_COMMENT_START: ( < XML_COMMENT_START > ) > : COMMENT_EXPECTED
   | < I_XML_PARAGRAPH_START: ( < XML_PARAGRAPH_START > ) > : DEFAULT
   | < I_XML_TOC_START: ( < XML_TOC_START > ) > : DEFAULT
 
@@ -177,6 +179,7 @@ PARSER_END(WikiParser)
   | < D_TEXT_TABLE_ENTRY: ( < TEXT_TABLE_ENTRY > ) > : DEFAULT
 
   | < D_XML_CODE_START: ( < XML_CODE_START > ) > : CODEHTML_EXPECTED
+  | < D_XML_COMMENT_START: ( < XML_COMMENT_START > ) > : COMMENT_EXPECTED
   | < D_XML_PARAGRAPH_START: ( < XML_PARAGRAPH_START > ) > : DEFAULT
   | < D_XML_PARAGRAPH_END: ( < XML_PARAGRAPH_END > ) > : DEFAULT
   | < D_XML_TOC_START: ( < XML_TOC_START > ) > : DEFAULT
@@ -189,6 +192,14 @@ PARSER_END(WikiParser)
   | < D_APOSTROPHE: ( < APOSTROPHE > ) > : DEFAULT
   | < D_WORD : ( <CHAR> )+ > : DEFAULT
   | < D_SPECIAL_SYMBOL: ( < SPECIAL_SYMBOL > ) > : DEFAULT
+}
+
+/////////////////////////////////////////////////////////////// Comment Handling
+
+< COMMENT_EXPECTED > TOKEN :
+{
+    < COMMENT_END: ( "</" ) ( < SPACE > )* ( "wiki:comment" ) ( < SPACE > )* ( ">" ) > : DEFAULT
+  | < COMMENT_TEXT: ( ~[] ) > : COMMENT_EXPECTED
 }
 
 /////////////////////////////////////////////////////////// Pragma Text Handling
@@ -653,6 +664,7 @@ void line() :
     ( LOOKAHEAD(2)
         (
             xmlCode()
+          | xmlComment()
           | xmlTableOfContents()
           | codeTextEmbedded()
           | textLinkSquaredBracket()
@@ -770,6 +782,22 @@ void textTableEntry() :
             this.visitor.newTableEntry();
         }
     )
+}
+
+/**
+ * Ignores the XML comment.
+ */
+void xmlComment() :
+{
+}
+{
+    ( < I_XML_COMMENT_START > | < D_XML_COMMENT_START > )
+    (
+        (
+            < COMMENT_TEXT >
+        )
+    )*
+    ( < COMMENT_END > )
 }
 
 /**

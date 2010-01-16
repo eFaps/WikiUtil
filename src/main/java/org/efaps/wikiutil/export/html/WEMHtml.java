@@ -493,7 +493,10 @@ public class WEMHtml
     public void onLinkExternal(final URL _url,
                                final CharSequence _description)
     {
-        //TODO
+        this.bldrs.peek().append("<a href=\"").append(_url).append("\">")
+            .append(_description != null && _description.length() > 0
+                            ? StringEscapeUtils.escapeHtml(_description.toString())
+                            : _url).append("</a>");
         if (this.wem != null)  {
             this.wem.onLinkExternal(_url, _description);
         }
@@ -505,7 +508,10 @@ public class WEMHtml
     public void onLinkInternal(final CharSequence _link,
                                final CharSequence _description)
     {
-        //TODO
+        this.bldrs.peek().append("<a href=\"").append(_link).append("\">")
+            .append(_description != null && _description.length() > 0
+                            ? StringEscapeUtils.escapeHtml(_description.toString())
+                            : _link).append("</a>");
         if (this.wem != null)  {
             this.wem.onLinkInternal(_link, _description);
         }

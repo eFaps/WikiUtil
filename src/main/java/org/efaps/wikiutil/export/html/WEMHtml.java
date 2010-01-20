@@ -25,7 +25,6 @@ import java.net.URL;
 import java.util.Stack;
 
 import org.apache.commons.lang.StringEscapeUtils;
-
 import org.efaps.wikiutil.wem.EProperty;
 import org.efaps.wikiutil.wem.ETypeface;
 import org.efaps.wikiutil.wem.IWikiEventModel;
@@ -76,6 +75,13 @@ public class WEMHtml
     private int toCDepth;
 
     /**
+     * Should only a snipplet be created;
+     */
+    private boolean snipplet = true;
+
+
+
+    /**
      * Wiki event debugger without underlying Wiki event manager.
      *
      */
@@ -119,7 +125,9 @@ public class WEMHtml
      */
     public void documentStart()
     {
-        this.bldrs.peek().append("<html><body>");
+        if (!this.snipplet) {
+            this.bldrs.peek().append("<html><body>");
+        }
         if (this.wem != null)  {
             this.wem.documentStart();
         }
@@ -141,7 +149,7 @@ public class WEMHtml
                         this.toCBldr.append("</ul>");
                     }
                     this.toCBldr.append("<li><a href=\"#").append(entry.getHref()).append("\">")
-                        .append(entry.getValue()).append("</li>");
+                        .append(entry.getValue()).append("</a></li>");
                     level = entry.getLevel();
                 }
             }
@@ -150,8 +158,9 @@ public class WEMHtml
                 level--;
             }
         }
-
-        this.bldrs.peek().append("</body></html>");
+        if (!this.snipplet) {
+            this.bldrs.peek().append("</body></html>");
+        }
         if (this.wem != null)  {
             this.wem.documentEnd();
         }
@@ -530,6 +539,28 @@ public class WEMHtml
     }
 
     /**
+     * Getter method for the instance variable {@link #snipplet}.
+     *
+     * @return value of instance variable {@link #snipplet}
+     */
+    public boolean isSnipplet()
+    {
+        return snipplet;
+    }
+
+    /**
+     * Setter method for instance variable {@link #snipplet}.
+     *
+     * @param _snipplet value for instance variable {@link #snipplet}
+     */
+
+    public WEMHtml setSnipplet(final boolean _snipplet)
+    {
+        this.snipplet = _snipplet;
+        return this;
+    }
+
+    /**
      * @see java.lang.Object#toString()
      * @return value of function {@link #getHtml()}
      */
@@ -539,6 +570,8 @@ public class WEMHtml
         return getHtml();
 
     }
+
+
 
     /**
      * Entry for Table of Contents.

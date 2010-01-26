@@ -448,7 +448,11 @@ public class WEMHtml
      */
     public void onImage(final URL _url)
     {
-        //TODO
+        String url = _url.toString();
+        if (!url.replace("http://","").contains("/")) {
+            url = url.replace("http://","");
+        }
+        this.bldrs.peek().append("<img src=\"").append(url).append("\"/>");
         if (this.wem != null)  {
             this.wem.onImage(_url);
         }
@@ -459,7 +463,7 @@ public class WEMHtml
      */
     public void onPreformat(final CharSequence _text)
     {
-       //TODO
+        this.bldrs.peek().append(_text);
         if (this.wem != null)  {
             this.wem.onPreformat(_text);
         }
@@ -545,7 +549,7 @@ public class WEMHtml
      */
     public boolean isSnipplet()
     {
-        return snipplet;
+        return this.snipplet;
     }
 
     /**

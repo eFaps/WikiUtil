@@ -28,6 +28,7 @@ import org.efaps.wikiutil.wem.ETypeface;
 import org.efaps.wikiutil.wem.IWikiEventModel;
 import org.efaps.wikiutil.wom.element.AbstractLineElement;
 import org.efaps.wikiutil.wom.element.Divider;
+import org.efaps.wikiutil.wom.element.NewLine;
 import org.efaps.wikiutil.wom.element.Paragraph;
 import org.efaps.wikiutil.wom.element.Preformat;
 import org.efaps.wikiutil.wom.element.Section;
@@ -341,14 +342,25 @@ public class WEM2WOM
     {
     }
 
+    /**
+     * Adds a {@link Divider divider instance}.
+     */
     public void onDivider()
     {
-        add(new Divider());
+        this.add(new Divider());
+    }
+
+    /**
+     * Adds a {@link NewLine new line instance}.
+     */
+    public void onNewLine()
+    {
+        this.add(new NewLine());
     }
 
     public void onImage(final URL _url)
     {
-        add(new Image(_url));
+        this.add(new Image(_url));
     }
 
     public void onPreformat(final CharSequence _text)

@@ -75,11 +75,9 @@ public class WEMHtml
     private int toCDepth;
 
     /**
-     * Should only a snipplet be created;
+     * Should only a snippet be created.
      */
     private boolean snipplet = true;
-
-
 
     /**
      * Wiki event debugger without underlying Wiki event manager.
@@ -440,6 +438,17 @@ public class WEMHtml
         this.bldrs.peek().append("<hr/>");
         if (this.wem != null)  {
             this.wem.onDivider();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public void onNewLine()
+    {
+        this.bldrs.peek().append("<br/>");
+        if (this.wem != null)  {
+            this.wem.onNewLine();
         }
     }
 

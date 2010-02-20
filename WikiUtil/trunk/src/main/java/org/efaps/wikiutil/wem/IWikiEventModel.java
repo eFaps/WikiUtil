@@ -170,6 +170,11 @@ public interface IWikiEventModel
     void onDivider();
 
     /**
+     * New line.
+     */
+    void onNewLine();
+
+    /**
      * Reads preformatted <code>_text</code>.
      *
      * @param _text     text

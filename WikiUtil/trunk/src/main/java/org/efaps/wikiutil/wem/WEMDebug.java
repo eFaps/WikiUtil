@@ -405,6 +405,17 @@ public class WEMDebug
     /**
      * {@inheritDoc}
      */
+    public void onNewLine()
+    {
+        println("onNewLine");
+        if (this.wem != null)  {
+            this.wem.onNewLine();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public void onImage(final URL _url)
     {
         println("onImage(" + _url + ")");

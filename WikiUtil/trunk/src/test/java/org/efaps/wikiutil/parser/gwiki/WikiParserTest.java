@@ -31,6 +31,7 @@ import org.efaps.wikiutil.wom.WikiPage;
 import org.efaps.wikiutil.wom.element.AbstractLineElement;
 import org.efaps.wikiutil.wom.element.AbstractParagraphList;
 import org.efaps.wikiutil.wom.element.Divider;
+import org.efaps.wikiutil.wom.element.NewLine;
 import org.efaps.wikiutil.wom.element.Paragraph;
 import org.efaps.wikiutil.wom.element.Preformat;
 import org.efaps.wikiutil.wom.element.Section;
@@ -1679,6 +1680,24 @@ public class WikiParserTest
     }
 
     /**
+     * Test parsing of new line.
+     *
+     * @throws ParseException if parsing failed
+     */
+    @Test(description = "test new line with HTML tag br")
+    public void testNewLineHtml()
+        throws ParseException
+    {
+        this.checkPage(
+                this.getPage("text 1<br/>text 2"),
+                new WikiPage()
+                    .add(new Paragraph()
+                        .add(new TextString("text 1"))
+                        .add(new NewLine())
+                        .add(new TextString("text 2"))));
+    }
+
+    /**
      * Tests parsing of a non Wiki word.
      *
      * @throws ParseException if parsing of the Wiki text failed
@@ -1693,7 +1712,6 @@ public class WikiParserTest
                     .add(new Paragraph()
                         .add(new TextString("AutoLink12+23"))));
     }
-
 
     /**
      * Tests parsing of complex example.
@@ -1944,7 +1962,7 @@ public class WikiParserTest
             Assert.assertEquals(((TextString) _pageElem).getText(),
                                 ((TextString) _compElem).getText(),
                                 "check text for element " + _path);
-        } else if (!(_pageElem instanceof Divider)) {
+        } else if (!(_pageElem instanceof Divider) && !(_pageElem instanceof NewLine)) {
             throw new Error("unknown class " + _pageElem.getClass());
         }
     }

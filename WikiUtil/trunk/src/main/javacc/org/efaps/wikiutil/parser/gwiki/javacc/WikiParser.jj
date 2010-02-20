@@ -82,6 +82,7 @@ PARSER_END(WikiParser)
   | < #TEXT_TABLE_ENTRY: ( ( < SPACE > )* ( "||" ) ( < SPACE > )* ) >
   | < #TEXT_TYPEFACE_ITALIC: ( "_" ) >
 
+  | < #XML_NEWLINE: ( ( "<br" ) ( < SPACE > )* ( "/>" ) ) >
   | < #XML_CODE_START: ( "<code>" ) >
   | < #XML_COMMENT_START: ( "<wiki:comment" ) ( < SPACE > )* ( ">" ) >
   | < #XML_PARAGRAPH_START: ( ( "<p" ) ( < SPACE > )* ( ">" ) ) >
@@ -140,6 +141,7 @@ PARSER_END(WikiParser)
   | < I_TEXT_LISTNUMBERED_ENTRY: ( < TEXT_LISTNUMBERED_ENTRY > ) > : DEFAULT
   | < I_TEXT_TABLE_STARTROW: ( < TEXT_TABLE_ENTRY > ) > : DEFAULT
 
+  | < I_XML_NEWLINE: ( < XML_NEWLINE > ) > : DEFAULT
   | < I_XML_CODE_START: ( < XML_CODE_START > ) > : CODEHTML_EXPECTED
   | < I_XML_COMMENT_START: ( < XML_COMMENT_START > ) > : COMMENT_EXPECTED
   | < I_XML_PARAGRAPH_START: ( < XML_PARAGRAPH_START > ) > : DEFAULT
@@ -178,6 +180,7 @@ PARSER_END(WikiParser)
   | < D_TEXT_TABLE_STARTROW: ( < NEWLINE > < TEXT_TABLE_ENTRY > ) > : DEFAULT
   | < D_TEXT_TABLE_ENTRY: ( < TEXT_TABLE_ENTRY > ) > : DEFAULT
 
+  | < D_XML_NEWLINE: ( < XML_NEWLINE > ) > : DEFAULT
   | < D_XML_CODE_START: ( < XML_CODE_START > ) > : CODEHTML_EXPECTED
   | < D_XML_COMMENT_START: ( < XML_COMMENT_START > ) > : COMMENT_EXPECTED
   | < D_XML_PARAGRAPH_START: ( < XML_PARAGRAPH_START > ) > : DEFAULT
@@ -669,6 +672,12 @@ void line() :
           | codeTextEmbedded()
           | textLinkSquaredBracket()
           | textTableEntry()
+          | (
+                ( <  I_XML_NEWLINE > | < D_XML_NEWLINE > )
+                {
+                    this.visitor.onNewLine();
+                }
+            )
           | (
                 ( < I_XML_PARAGRAPH_START > | < D_XML_PARAGRAPH_START > )
                 {

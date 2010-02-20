@@ -36,6 +36,7 @@ import org.efaps.wikiutil.parser.gwiki.javacc.ParseException;
 import org.efaps.wikiutil.wom.WikiPage;
 import org.efaps.wikiutil.wom.element.AbstractLineElement;
 import org.efaps.wikiutil.wom.element.AbstractParagraphList;
+import org.efaps.wikiutil.wom.element.NewLine;
 import org.efaps.wikiutil.wom.element.Paragraph;
 import org.efaps.wikiutil.wom.element.Preformat;
 import org.efaps.wikiutil.wom.element.Section;
@@ -270,6 +271,8 @@ public class WikiPage2Tex
             _out.append(this.escape(((InternalLink) _element).getLink()));
         } else if (_element instanceof InternalLinkWithDescription)  {
             _out.append(this.escape(((InternalLinkWithDescription) _element).getDescription()));
+        } else if (_element instanceof NewLine)  {
+            _out.append(" \\newline ");
         } else if (_element instanceof Preformat)  {
             _out.append("\n\\begin{lstlisting}\n")
                 .append(((Preformat) _element).getCode())

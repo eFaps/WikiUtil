@@ -25,7 +25,6 @@ import java.net.URL;
 import java.util.Stack;
 
 import org.apache.commons.lang.StringUtils;
-
 import org.efaps.wikiutil.wem.EProperty;
 import org.efaps.wikiutil.wem.ETypeface;
 import org.efaps.wikiutil.wem.IWikiEventModel;
@@ -470,6 +469,15 @@ System.err.println("type face " + _typeface + " not defined and ignored");
     {
         makeEndText(true);
         this.wem.onDivider();
+    }
+
+    /**
+     * A new line is read.
+     */
+    public void onNewLine()
+    {
+        this.makeEndText(true);
+        this.wem.onNewLine();
     }
 
     /**

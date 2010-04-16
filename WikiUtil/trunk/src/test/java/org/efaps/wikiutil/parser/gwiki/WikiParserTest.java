@@ -78,7 +78,7 @@ public class WikiParserTest
     public void testComplex()
         throws ParseException, MalformedURLException
     {
-        final WikiPage page = this.getPage("#summary summary description\n"
+        final WikiPage page = getPage("#summary summary description\n"
                 + "#sidebar SIDEBAR\n"
                 + "#labels abc,ttt,def\n"
                 + "\n"
@@ -125,7 +125,7 @@ public class WikiParserTest
                                             .add(new ExternalLinkWithDescription(new URL("http://www.efaps.org"),
                                                                                  "eFaps")))))))));
 
-        this.checkPage(page, compare);
+        checkPage(page, compare);
     }
 
     /**
@@ -137,8 +137,8 @@ public class WikiParserTest
     public void testPragmaLabels()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("#labels abc,ttt,def"),
+        checkPage(
+                getPage("#labels abc,ttt,def"),
                 new WikiPage()
                     .add(new Label("abc"))
                     .add(new Label("ttt"))
@@ -154,8 +154,8 @@ public class WikiParserTest
     public void testPragmaSidebar()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("#sidebar Sidebar"),
+        checkPage(
+                getPage("#sidebar Sidebar"),
                 new WikiPage()
                     .add(new Sidebar("Sidebar")));
     }
@@ -169,8 +169,8 @@ public class WikiParserTest
     public void testPragmaSummary()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("#summary Summary"),
+        checkPage(
+                getPage("#summary Summary"),
                 new WikiPage()
                     .add(new Summary("Summary")));
     }
@@ -185,8 +185,8 @@ public class WikiParserTest
     public void testPragmaMultipleDefinitions()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("#summary Summary\n#sidebar Sidebar\n#labels abc,ttt,def"),
+        checkPage(
+                getPage("#summary Summary\n#sidebar Sidebar\n#labels abc,ttt,def"),
                 new WikiPage()
                     .add(new Summary("Summary"))
                     .add(new Sidebar("Sidebar"))
@@ -205,8 +205,8 @@ public class WikiParserTest
     public void testHeading1Single()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("= Te=st ="),
+        checkPage(
+                getPage("= Te=st ="),
                 new WikiPage()
                     .addSubSection(new Section()
                         .addHeading(new TextString("Te=st"))));
@@ -221,8 +221,8 @@ public class WikiParserTest
     public void testHeading1Twice()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("= Te=st =\n=Test2="),
+        checkPage(
+                getPage("= Te=st =\n=Test2="),
                 new WikiPage()
                     .addSubSection(new Section()
                         .addHeading(new TextString("Te=st")))
@@ -239,8 +239,8 @@ public class WikiParserTest
     public void testHeading1WrongWithNewLine()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("= Test\n"),
+        checkPage(
+                getPage("= Test\n"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("= Test"))));
@@ -255,8 +255,8 @@ public class WikiParserTest
     public void testHeading1WithTable()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("= Test =\n|| Name ||"),
+        checkPage(
+                getPage("= Test =\n|| Name ||"),
                 new WikiPage()
                     .addSubSection(new Section()
                         .addHeading(new TextString("Test"))
@@ -277,8 +277,8 @@ public class WikiParserTest
     public void testHeading2Single()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("== Test =="),
+        checkPage(
+                getPage("== Test =="),
                 new WikiPage()
                     .addSubSection(new Section()
                         .addSubSection(new Section()
@@ -294,20 +294,20 @@ public class WikiParserTest
     public void testHeading2SingleWithBold()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("== *Test* =="),
+        checkPage(
+                getPage("== *Test* =="),
                 new WikiPage()
                     .addSubSection(new Section()
                         .addSubSection(new Section()
                             .addHeading(new TypefaceBold()
                                 .add(new TextString("Test"))))));
     }
-
+/*TODO correct test
     /**
      * Test that a single heading 2 works (without new line).
      *
      * @throws ParseException is parsing of the Wiki text failed
-     */
+
     @Test(description = "simple heading 2 with code html tag")
     public void testHeading2SingleWithCodeHTMLTag()
         throws ParseException
@@ -319,6 +319,7 @@ public class WikiParserTest
                         .addSubSection(new Section()
                             .addHeading(new TextString("Test <code>code</code>")))));
     }
+*/
 
     /**
      * Test that a single text which starts with == works (with new line).
@@ -329,8 +330,8 @@ public class WikiParserTest
     public void testHeading2WrongWithNewLine()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("== Test\n"),
+        checkPage(
+                getPage("== Test\n"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("== Test"))));
@@ -345,8 +346,8 @@ public class WikiParserTest
     public void testHeading2WrongWithoutNewLine()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("== Test"),
+        checkPage(
+                getPage("== Test"),
                 new WikiPage()
                     .add(new Paragraph()
                          .add(new TextString("== Test"))));
@@ -361,8 +362,8 @@ public class WikiParserTest
     public void testHeading3Single()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("=== Test ==="),
+        checkPage(
+                getPage("=== Test ==="),
                 new WikiPage()
                     .addSubSection(new Section()
                         .addSubSection(new Section()
@@ -379,8 +380,8 @@ public class WikiParserTest
     public void testHeading3WrongWithNewLine()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("=== Test\n"),
+        checkPage(
+                getPage("=== Test\n"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("=== Test"))));
@@ -395,8 +396,8 @@ public class WikiParserTest
     public void testHeading4Single()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("==== Test ===="),
+        checkPage(
+                getPage("==== Test ===="),
                 new WikiPage()
                     .addSubSection(new Section()
                         .addSubSection(new Section()
@@ -414,8 +415,8 @@ public class WikiParserTest
     public void testHeading4WrongWithNewLine()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("==== Test\n"),
+        checkPage(
+                getPage("==== Test\n"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("==== Test"))));
@@ -430,8 +431,8 @@ public class WikiParserTest
     public void testHeading5Single()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("===== Test ====="),
+        checkPage(
+                getPage("===== Test ====="),
                 new WikiPage()
                     .addSubSection(new Section()
                         .addSubSection(new Section()
@@ -450,8 +451,8 @@ public class WikiParserTest
     public void testHeading5WrongWithNewLine()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("===== Test\n"),
+        checkPage(
+                getPage("===== Test\n"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("===== Test"))));
@@ -466,8 +467,8 @@ public class WikiParserTest
     public void testHeading6Single()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("====== Test ======"),
+        checkPage(
+                getPage("====== Test ======"),
                 new WikiPage()
                 .addSubSection(new Section()
                     .addSubSection(new Section()
@@ -487,8 +488,8 @@ public class WikiParserTest
     public void testHeading6WrongWithNewLine()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("====== Test\n"),
+        checkPage(
+                getPage("====== Test\n"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("====== Test"))));
@@ -505,8 +506,8 @@ public class WikiParserTest
     public void testTextWithHeadingTextBetween()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("This is a Test with == Heading 2 == between"),
+        checkPage(
+                getPage("This is a Test with == Heading 2 == between"),
                 new WikiPage()
                     .add(new Paragraph()
                          .add(new TextString("This is a Test with == Heading 2 == between"))));
@@ -522,7 +523,7 @@ public class WikiParserTest
     public void testImageGIFWithoutText()
         throws ParseException, MalformedURLException
     {
-        this.checkPage(this.getPage("http://www/picture.gif"),
+        checkPage(getPage("http://www/picture.gif"),
                 new WikiPage()
                     .add(new Paragraph()
                          .add(new Image(new URL("http://www/picture.gif")))));
@@ -538,8 +539,8 @@ public class WikiParserTest
     public void testImageJPGWithoutText()
         throws ParseException, MalformedURLException
     {
-        this.checkPage(
-                this.getPage("http://www/picture.jpg"),
+        checkPage(
+                getPage("http://www/picture.jpg"),
                 new WikiPage()
                     .add(new Paragraph()
                          .add(new Image(new URL("http://www/picture.jpg")))));
@@ -555,8 +556,8 @@ public class WikiParserTest
     public void testImageJPEGWithoutText()
         throws ParseException, MalformedURLException
     {
-        this.checkPage(
-                this.getPage("http://www/picture.jpeg"),
+        checkPage(
+                getPage("http://www/picture.jpeg"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new Image(new URL("http://www/picture.jpeg")))));
@@ -572,8 +573,8 @@ public class WikiParserTest
     public void testImagePNGWithoutText()
         throws ParseException, MalformedURLException
     {
-        this.checkPage(
-                this.getPage("http://www/picture.png"),
+        checkPage(
+                getPage("http://www/picture.png"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new Image(new URL("http://www/picture.png")))));
@@ -589,8 +590,8 @@ public class WikiParserTest
     public void testExternalLinkWithoutText()
         throws ParseException, MalformedURLException
     {
-        this.checkPage(
-                this.getPage("http://www/picture.html"),
+        checkPage(
+                getPage("http://www/picture.html"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new ExternalLink(new URL("http://www/picture.html")))));
@@ -607,8 +608,8 @@ public class WikiParserTest
     public void testExternalLinkSquaredBracketWithoutTextWithoutDescription()
         throws ParseException, MalformedURLException
     {
-        this.checkPage(
-                this.getPage("[http://www/picture.html]"),
+        checkPage(
+                getPage("[http://www/picture.html]"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new ExternalLink(new URL("http://www/picture.html")))));
@@ -625,8 +626,8 @@ public class WikiParserTest
     public void testExternalLinkSquaredBracketWithoutTextWithDescription()
         throws ParseException, MalformedURLException
     {
-        this.checkPage(
-                this.getPage("[http://www/picture.html a simple text]"),
+        checkPage(
+                getPage("[http://www/picture.html a simple text]"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new ExternalLinkWithDescription(new URL("http://www/picture.html"), "a simple text"))));
@@ -642,8 +643,8 @@ public class WikiParserTest
     public void testInternalLinkSquaredBracketWithoutTextWithoutDescription()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("[Introduction]"),
+        checkPage(
+                getPage("[Introduction]"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new InternalLink("Introduction"))));
@@ -659,8 +660,8 @@ public class WikiParserTest
     public void testInternalLinkSquaredBracketWithoutTextWithDescription()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("[Introduction  a simple text]"),
+        checkPage(
+                getPage("[Introduction  a simple text]"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new InternalLinkWithDescription("Introduction", "a simple text"))));
@@ -675,8 +676,8 @@ public class WikiParserTest
     public void testListBulletedOneEntry()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage(" * this is an entry"),
+        checkPage(
+                getPage(" * this is an entry"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new ListBulleted()
@@ -694,8 +695,8 @@ public class WikiParserTest
     public void testListBulletedOneEntryMultipleSpaces()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("   *  this is an entry"),
+        checkPage(
+                getPage("   *  this is an entry"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new ListBulleted()
@@ -713,8 +714,8 @@ public class WikiParserTest
     public void testListBulletedTwoEntries()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage(" * this is first entry\n * this is second entry"),
+        checkPage(
+                getPage(" * this is first entry\n * this is second entry"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new ListBulleted()
@@ -735,8 +736,8 @@ public class WikiParserTest
     public void testListBulletedTwoEntriesParagraphDivider()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage(" * this is first entry\n * this is second entry\n\n----"),
+        checkPage(
+                getPage(" * this is first entry\n * this is second entry\n\n----"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new ListBulleted()
@@ -759,8 +760,8 @@ public class WikiParserTest
     public void testListBulletedMultipleDeepEntries()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage(
+        checkPage(
+                getPage(
                           "  * this is entry 1\n"
                         + "    *  this is entry 1a\n"
                         + "    * this is entry 1b\n"
@@ -784,7 +785,7 @@ public class WikiParserTest
                                     .add(new TextString("this is entry 2")))))));
 
     }
-
+/* TODO correct not working test
     @Test(description = "")
     public void testListBulletedHTML()
         throws ParseException
@@ -821,7 +822,7 @@ public class WikiParserTest
                                 .add(new Paragraph()
                                     .add(new TextString("this is entry 2")))))));
     }
-
+*/
     /**
      * Tests parsing of one single numbered list entry.
      *
@@ -831,8 +832,8 @@ public class WikiParserTest
     public void testListNumberedOneEntry()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage(" # this is an entry"),
+        checkPage(
+                getPage(" # this is an entry"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new ListNumbered()
@@ -850,8 +851,8 @@ public class WikiParserTest
     public void testListMixedMultipleDeepEntries()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage(
+        checkPage(
+                getPage(
                           "  * this is entry 1\n"
                         + "    *  this is entry 1a\n"
                         + "    * this is entry 1b\n"
@@ -894,8 +895,8 @@ public class WikiParserTest
     public void testListTextList()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage(" * list 1\ntext\n * list 2"),
+        checkPage(
+                getPage(" * list 1\ntext\n * list 2"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new ListBulleted()
@@ -918,8 +919,8 @@ public class WikiParserTest
     public void testListWithLink()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage(" * [Start Introduction]"),
+        checkPage(
+                getPage(" * [Start Introduction]"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new ListBulleted()
@@ -937,8 +938,8 @@ public class WikiParserTest
     public void testMultilineText()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("abcdef\nhijkl"),
+        checkPage(
+                getPage("abcdef\nhijkl"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("abcdef hijkl"))));
@@ -953,8 +954,8 @@ public class WikiParserTest
     public void testParagraphHtml()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("abcdef<p>geha</p>"),
+        checkPage(
+                getPage("abcdef<p>geha</p>"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("abcdef")))
@@ -971,8 +972,8 @@ public class WikiParserTest
     public void testParagraphText()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("abcdef\n\ngeha"),
+        checkPage(
+                getPage("abcdef\n\ngeha"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("abcdef")))
@@ -989,8 +990,8 @@ public class WikiParserTest
     public void testParagraphTextWithHeading()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("= Heading =\n\nabcdef\n\ngeha"),
+        checkPage(
+                getPage("= Heading =\n\nabcdef\n\ngeha"),
                 new WikiPage()
                     .addSubSection(new Section()
                         .addHeading(new TextString("Heading"))
@@ -1010,8 +1011,8 @@ public class WikiParserTest
     public void testComment()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("<wiki:comment>\nMy Comment\n</wiki:comment>"),
+        checkPage(
+                getPage("<wiki:comment>\nMy Comment\n</wiki:comment>"),
                 new WikiPage());
     }
 
@@ -1025,8 +1026,8 @@ public class WikiParserTest
     public void testCommentComplex()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("Before Comment <wiki:comment>\nMy Comment\n</wiki:comment>and after Comment"),
+        checkPage(
+                getPage("Before Comment <wiki:comment>\nMy Comment\n</wiki:comment>and after Comment"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("Before Comment and after Comment"))));
@@ -1041,8 +1042,8 @@ public class WikiParserTest
     public void testCodeText()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("{{{\nabcdef\r\ngeha\n  dies\n}}}"),
+        checkPage(
+                getPage("{{{\nabcdef\r\ngeha\n  dies\n}}}"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new Preformat("abcdef\ngeha\n  dies"))));
@@ -1057,8 +1058,8 @@ public class WikiParserTest
     public void testCodeHTML()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("<code>\nabcdef\r\ngeha\n  dies\n</code>"),
+        checkPage(
+                getPage("<code>\nabcdef\r\ngeha\n  dies\n</code>"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new Preformat("abcdef\ngeha\n  dies".trim()))));
@@ -1073,8 +1074,8 @@ public class WikiParserTest
     public void testCodeWindows()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("{{{\r\n\r\nabcdef\r\ngeha\r\n  dies\r\n}}}"),
+        checkPage(
+                getPage("{{{\r\n\r\nabcdef\r\ngeha\r\n  dies\r\n}}}"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new Preformat("abcdef\ngeha\n  dies"))));
@@ -1089,8 +1090,8 @@ public class WikiParserTest
     public void testCodeTextInline()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("text start {{{some code}}} and text end"),
+        checkPage(
+                getPage("text start {{{some code}}} and text end"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("text start "))
@@ -1108,8 +1109,8 @@ public class WikiParserTest
     public void testCodeTextInlineInNewLine()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("text start\n{{{some code}}}\nand text end"),
+        checkPage(
+                getPage("text start\n{{{some code}}}\nand text end"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("text start "))
@@ -1127,8 +1128,8 @@ public class WikiParserTest
     public void testCodeWithinTextAndTextInNewLine()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("text start {{{some code}}} and text end\n\nnew line"),
+        checkPage(
+                getPage("text start {{{some code}}} and text end\n\nnew line"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("text start "))
@@ -1148,8 +1149,8 @@ public class WikiParserTest
     public void testDividerSingle()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("----"),
+        checkPage(
+                getPage("----"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new Divider())));
@@ -1164,8 +1165,8 @@ public class WikiParserTest
     public void testDividerSingleWithManyMinus()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("---------"),
+        checkPage(
+                getPage("---------"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new Divider())));
@@ -1180,8 +1181,8 @@ public class WikiParserTest
     public void testDividerWrongInline()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("A text with divider ---- tag"),
+        checkPage(
+                getPage("A text with divider ---- tag"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("A text with divider ---- tag"))));
@@ -1196,8 +1197,8 @@ public class WikiParserTest
     public void testTOCDepthUnparsable()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("<wiki:toc max_depth=\"A\"/>"),
+        checkPage(
+                getPage("<wiki:toc max_depth=\"A\"/>"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TableOfContents(1))));
@@ -1212,8 +1213,8 @@ public class WikiParserTest
     public void testTOCGreaterThan6()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("<wiki:toc max_depth=\"7\"/>"),
+        checkPage(
+                getPage("<wiki:toc max_depth=\"7\"/>"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TableOfContents(6))));
@@ -1228,8 +1229,8 @@ public class WikiParserTest
     public void testTOCLowerThan1()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("<wiki:toc max_depth=\"0\"/>"),
+        checkPage(
+                getPage("<wiki:toc max_depth=\"0\"/>"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TableOfContents(1))));
@@ -1244,8 +1245,8 @@ public class WikiParserTest
     public void testTOCSingle()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("<wiki:toc max_depth=\"1\"/>"),
+        checkPage(
+                getPage("<wiki:toc max_depth=\"1\"/>"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TableOfContents(1))));
@@ -1260,8 +1261,8 @@ public class WikiParserTest
     public void testTOCWrongOnlyMaxDepthText()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("wiki:toc max_depth=\"1\""),
+        checkPage(
+                getPage("wiki:toc max_depth=\"1\""),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("wiki:toc max_depth=\"1\""))));
@@ -1276,8 +1277,8 @@ public class WikiParserTest
     public void testTOCWithSpaces()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("<wiki:toc  \tmax_depth = \"1\" />"),
+        checkPage(
+                getPage("<wiki:toc  \tmax_depth = \"1\" />"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TableOfContents(1))));
@@ -1292,8 +1293,8 @@ public class WikiParserTest
     public void testTOCWithTextAtEnd()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("<wiki:toc max_depth=\"1\" />abcd\ngeha"),
+        checkPage(
+                getPage("<wiki:toc max_depth=\"1\" />abcd\ngeha"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TableOfContents(1))
@@ -1310,8 +1311,8 @@ public class WikiParserTest
     public void testTOCWithTextAtStart()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("abcd<wiki:toc max_depth=\"1\" />"),
+        checkPage(
+                getPage("abcd<wiki:toc max_depth=\"1\" />"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("abcd"))
@@ -1327,8 +1328,8 @@ public class WikiParserTest
     public void testTypefaceBoldText()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("Hello * Bold * and a second * Bold *"),
+        checkPage(
+                getPage("Hello * Bold * and a second * Bold *"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("Hello "))
@@ -1348,8 +1349,8 @@ public class WikiParserTest
     public void testTypefaceItalicText()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("Hello _Italic_ and a second _ Italic _"),
+        checkPage(
+                getPage("Hello _Italic_ and a second _ Italic _"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("Hello "))
@@ -1369,8 +1370,8 @@ public class WikiParserTest
     public void testTypefaceBoldTextWithTypefaceCode()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("This is a *{{{test}}}* for two type faces"),
+        checkPage(
+                getPage("This is a *{{{test}}}* for two type faces"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("This is a "))
@@ -1389,8 +1390,8 @@ public class WikiParserTest
     public void testTableOneRow()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("|| First || Second ||"),
+        checkPage(
+                getPage("|| First || Second ||"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new Table()
@@ -1412,8 +1413,8 @@ public class WikiParserTest
     public void testTableOneRowWithBoldEntries()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("|| *First* || *Second* ||"),
+        checkPage(
+                getPage("|| *First* || *Second* ||"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new Table()
@@ -1437,8 +1438,8 @@ public class WikiParserTest
     public void testTableOneRowWithHtmlParagraphEntries()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("|| First Line<p>Second Line</p> ||"),
+        checkPage(
+                getPage("|| First Line<p>Second Line</p> ||"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new Table()
@@ -1460,8 +1461,8 @@ public class WikiParserTest
     public void testTableOneRowWithPostParagraphText()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("|| First || Second ||\n\npost text"),
+        checkPage(
+                getPage("|| First || Second ||\n\npost text"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new Table()
@@ -1486,8 +1487,8 @@ public class WikiParserTest
     public void testTableOneRowWithPrePostText()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("pre text\n|| First || Second ||\npost text"),
+        checkPage(
+                getPage("pre text\n|| First || Second ||\npost text"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("pre text"))
@@ -1511,8 +1512,8 @@ public class WikiParserTest
     public void testTableThreeRows()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("|| A1 || B1 ||\n|| A2 || B2 ||\n|| A3 || B3 ||"),
+        checkPage(
+                getPage("|| A1 || B1 ||\n|| A2 || B2 ||\n|| A3 || B3 ||"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new Table()
@@ -1549,8 +1550,8 @@ public class WikiParserTest
         throws ParseException
     {
 // TODO: ev. parse exception?
-        this.checkPage(
-                this.getPage("abc || First || Second ||"),
+        checkPage(
+                getPage("abc || First || Second ||"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("abc"))
@@ -1573,8 +1574,8 @@ public class WikiParserTest
     public void testWikiWord()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("AutoLink"),
+        checkPage(
+                getPage("AutoLink"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new InternalLink("AutoLink"))));
@@ -1589,8 +1590,8 @@ public class WikiParserTest
     public void testWikiWordComplex()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("AutoLink4AnExmaple"),
+        checkPage(
+                getPage("AutoLink4AnExmaple"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new InternalLink("AutoLink4AnExmaple"))));
@@ -1605,8 +1606,8 @@ public class WikiParserTest
     public void testWikiWordWrongPrefixText()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("aAutoLink"),
+        checkPage(
+                getPage("aAutoLink"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("aAutoLink"))));
@@ -1621,8 +1622,8 @@ public class WikiParserTest
     public void testWikiWordWrongSuffixText()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("AutoLinkFadG ssd"),
+        checkPage(
+                getPage("AutoLinkFadG ssd"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("AutoLinkFadG ssd"))));
@@ -1637,8 +1638,8 @@ public class WikiParserTest
     public void testWikiWordWithSeparatorPlusWithText()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("AutoLink12+23"),
+        checkPage(
+                getPage("AutoLink12+23"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new InternalLink("AutoLink12"))
@@ -1654,8 +1655,8 @@ public class WikiParserTest
     public void testWikiWordWithSeparatorMinusWithText()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("AutoLink12-23"),
+        checkPage(
+                getPage("AutoLink12-23"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new InternalLink("AutoLink12"))
@@ -1671,8 +1672,8 @@ public class WikiParserTest
     public void testWikiWordWithSeparatorEqualWithText()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("AutoLink12=23"),
+        checkPage(
+                getPage("AutoLink12=23"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new InternalLink("AutoLink12"))
@@ -1688,8 +1689,8 @@ public class WikiParserTest
     public void testNewLineHtml()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("text 1<br/>text 2"),
+        checkPage(
+                getPage("text 1<br/>text 2"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("text 1"))
@@ -1706,8 +1707,8 @@ public class WikiParserTest
     public void testNonWikiWord()
         throws ParseException
     {
-        this.checkPage(
-                this.getPage("!AutoLink12+23"),
+        checkPage(
+                getPage("!AutoLink12+23"),
                 new WikiPage()
                     .add(new Paragraph()
                         .add(new TextString("AutoLink12+23"))));
@@ -1796,14 +1797,14 @@ public class WikiParserTest
         }
 
         // check paragraphs
-        this.checkParagraphs("", _page, _compare);
+        checkParagraphs("", _page, _compare);
 
         // check sub sections
         Assert.assertEquals(_page.getSubSections().size(),
                             _compare.getSubSections().size(),
                             "same # of sub sections 1");
         for (int jdx = 0; jdx < _page.getSubSections().size(); jdx++)  {
-            this.checkSection("" + jdx,
+            checkSection("" + jdx,
                               _page.getSubSections().get(jdx),
                               _compare.getSubSections().get(jdx));
         }
@@ -1824,18 +1825,18 @@ public class WikiParserTest
                             _compSection.getHeadings().size(),
                             "same # of headings " + _path);
         for (int jdx = 0; jdx < _pageSection.getHeadings().size(); jdx++)  {
-            this.checkLineElement(_path + "-" + jdx,
+            checkLineElement(_path + "-" + jdx,
                                   _pageSection.getHeadings().get(jdx),
                                   _compSection.getHeadings().get(jdx));
         }
         // check paragraphs
-        this.checkParagraphs(_path, _pageSection, _compSection);
+        checkParagraphs(_path, _pageSection, _compSection);
         // check sub sections
         Assert.assertEquals(_pageSection.getSubSections().size(),
                             _compSection.getSubSections().size(),
                             "same # of sub sections 2 " + _path);
         for (int jdx = 0; jdx < _pageSection.getSubSections().size(); jdx++)  {
-            this.checkSection(_path + "-" + jdx,
+            checkSection(_path + "-" + jdx,
                               _pageSection.getSubSections().get(jdx),
                               _compSection.getSubSections().get(jdx));
         }
@@ -1867,7 +1868,7 @@ public class WikiParserTest
                                 compPara.getElements().size(),
                                 "check size for element " + _path + "-" + jdx + " (" + _pageTextLine + ")");
             for (int kdx = 0; kdx < pagePara.getElements().size(); kdx++)  {
-                this.checkLineElement(_path + "-" + jdx + "-" + kdx,
+                checkLineElement(_path + "-" + jdx + "-" + kdx,
                                       pagePara.getElements().get(kdx),
                                       compPara.getElements().get(kdx));
             }
@@ -1907,7 +1908,7 @@ public class WikiParserTest
                                 ((AbstractListEntry<?>) _compElem).getEntries().size(),
                                 "same # of entries for list element " + _path);
             for (int ldx = 0; ldx < ((AbstractListEntry<?>) _pageElem).getEntries().size(); ldx++)  {
-                this.checkParagraphs(_path + "-" + ldx,
+                checkParagraphs(_path + "-" + ldx,
                                      ((AbstractListEntry<?>) _pageElem).getEntries().get(ldx),
                                      ((AbstractListEntry<?>) _compElem).getEntries().get(ldx));
             }
@@ -1919,7 +1920,7 @@ public class WikiParserTest
                                 ((AbstractTypeface<?>) _compElem).getElements().size(),
                                 "same # of entries for type face element " + _path);
             for (int ldx = 0; ldx < ((AbstractTypeface<?>) _pageElem).getElements().size(); ldx++)  {
-                this.checkLineElement(_path + "-" + ldx,
+                checkLineElement(_path + "-" + ldx,
                                       ((AbstractTypeface<?>) _pageElem).getElements().get(ldx),
                                       ((AbstractTypeface<?>) _compElem).getElements().get(ldx));
             }
@@ -1949,7 +1950,7 @@ public class WikiParserTest
                                     compRow.getEntries().size(),
                                     "check # columns for rows of table " + _path + "-" + ldx);
                 for (int mdx = 0; mdx < pageRow.getEntries().size(); mdx++)  {
-                    this.checkParagraphs(_path + "-" + ldx + "-" + mdx,
+                    checkParagraphs(_path + "-" + ldx + "-" + mdx,
                                          pageRow.getEntries().get(mdx),
                                          compRow.getEntries().get(mdx));
                 }

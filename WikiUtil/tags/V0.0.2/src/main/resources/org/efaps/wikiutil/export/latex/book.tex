@@ -1,0 +1,110 @@
+%
+% Copyright 2003 - 2010 The eFaps Team
+%
+% Licensed under the Apache License, Version 2.0 (the "License");
+% you may not use this file except in compliance with the License.
+% You may obtain a copy of the License at
+%
+%     http://www.apache.org/licenses/LICENSE-2.0
+%
+% Unless required by applicable law or agreed to in writing, software
+% distributed under the License is distributed on an "AS IS" BASIS,
+% WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+% See the License for the specific language governing permissions and
+% limitations under the License.
+%
+% Revision:        $Rev$
+% Last Changed:    $Date$
+% Last Changed By: $Author$
+%
+
+\documentclass[final,a4paper,10pt,oneside]{book}
+\usepackage{xcolor,graphics,a4,lastpage,setspace}
+
+% to get correct official euro symbol
+\usepackage{eurosym}
+
+% tables on multiple sides with automatic width columns
+\usepackage{tabularx}
+\usepackage{longtable}
+\usepackage{ltxtable}
+
+% To embed file content directly in a tex file
+\usepackage{filecontents}
+
+% PDF Support
+\usepackage[pdftex]{graphicx}
+
+% better Font for PDF
+\usepackage{times}
+
+% create PDF Thumbnails
+\usepackage{thumbpdf}
+
+% that multi page PDF file could be included
+\usepackage{pdfpages}
+
+% Hyperlinks, with internal links in black color (instead of red box)
+\usepackage[pdftex,colorlinks=true,linkcolor=black]{hyperref}
+
+% Listings
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily\fontsize{9}{12}\selectfont,xleftmargin=5mm,breaklines=true}
+
+% paragraph indention set to 0
+\setlength{\parindent}{0cm}
+
+% change width of the text for better source code
+\setlength{\oddsidemargin}{.5cm}
+\setlength{\textwidth}{16cm}
+
+% read all variables
+\input{variables}
+
+% to include preformatted text (like the license file)
+\usepackage{fancyvrb}
+
+% to define appendix of the book
+\usepackage{appendix}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+    % define the PDF properties
+    \ifdefined\WikiAuthor
+        \hypersetup{pdfauthor=\WikiAuthor}
+    \fi
+    \ifdefined\WikiTitle
+        \hypersetup{pdftitle=\WikiTitle}
+    \fi
+    \ifdefined\WikiSubTitle
+        \hypersetup{pdfsubject=\WikiSubTitle}
+    \fi
+    \ifdefined\WikiPDFCreator
+        \hypersetup{pdfcreator=\WikiPDFCreator}
+    \else
+        \hypersetup{pdfcreator=eFaps Wiki Util}
+    \fi
+    \ifdefined\WikiPDFKeywords
+        \hypersetup{pdfkeywords=\WikiPDFKeywords}
+    \fi
+
+    % import front page (title page)
+    \input{frontpage}
+
+    \tableofcontents
+
+    \newpage
+
+    \input{content}
+
+    \ifdefined\WikiLicenseFile
+        \appendixpage
+        \addcontentsline{toc}{part}{Appendices}
+        \appendix
+        \chapter{License}
+        \VerbatimInput[baselinestretch=1,fontsize=\footnotesize,numbers=none]{\WikiLicenseFile}
+    \fi
+
+\end{document}

@@ -34,7 +34,7 @@
     <packaging>jar</packaging>
     <groupId>org.efaps</groupId>
     <artifactId>wikiutil</artifactId>
-    <version>0.0.2-SNAPSHOT</version>
+    <version>0.0.4-SNAPSHOT</version>
     <name>eFaps WikiUtil</name>
     <description>
         eFaps Wikiutil is used to render for a file containing wiki formated information a webpage or pdf.

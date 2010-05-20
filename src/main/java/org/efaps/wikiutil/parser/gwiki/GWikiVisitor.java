@@ -349,7 +349,12 @@ public class GWikiVisitor
             this.listIndent.pop();
             this.wem.paragraphEnd();
             this.wem.listEntryEnd();
-            this.wem.listBulletedEnd();
+            final Boolean isNumb = this.listIsNumb.pop();
+            if (isNumb) {
+                this.wem.listNumberedEnd();
+            } else {
+                this.wem.listBulletedEnd();
+            }
         }
     }
 
@@ -476,7 +481,7 @@ System.err.println("type face " + _typeface + " not defined and ignored");
      */
     public void onNewLine()
     {
-        this.makeEndText(true);
+        makeEndText(true);
         this.wem.onNewLine();
     }
 

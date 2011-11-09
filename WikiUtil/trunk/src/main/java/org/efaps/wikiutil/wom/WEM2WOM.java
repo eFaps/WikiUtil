@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2010 The eFaps Team
+ * Copyright 2003 - 2011 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
  */
 
 package org.efaps.wikiutil.wom;
-
 import java.net.URL;
 import java.util.Stack;
 
@@ -140,7 +139,7 @@ public class WEM2WOM
         return this.page;
     }
 
-    @Override()
+    @Override
     public void onProperty(final EProperty _property,
                            final String _value)
     {
@@ -159,14 +158,17 @@ public class WEM2WOM
         }
     }
 
+    @Override
     public void documentStart()
     {
     }
 
+    @Override
     public void documentEnd()
     {
     }
 
+    @Override
     public void sectionStart()
     {
         final Section section = new Section();
@@ -178,21 +180,25 @@ public class WEM2WOM
         this.sections.push(section);
     }
 
+    @Override
     public void sectionEnd()
     {
         this.sections.pop();
     }
 
+    @Override
     public void headingStart()
     {
         this.inHeader = true;
     }
 
+    @Override
     public void headingEnd()
     {
         this.inHeader = false;
     }
 
+    @Override
     public void paragraphStart()
     {
         if (!this.listDefis.isEmpty())  {
@@ -211,6 +217,7 @@ public class WEM2WOM
         }
     }
 
+    @Override
     public void paragraphEnd()
     {
     }
@@ -218,15 +225,17 @@ public class WEM2WOM
     /**
      * Table starts.
      */
+    @Override
     public void tableStart()
     {
         this.table = new Table();
-        add(this.table);
+        this.add(this.table);
     }
 
     /**
      * Table ends.
      */
+    @Override
     public void tableEnd()
     {
         this.table = null;
@@ -235,6 +244,7 @@ public class WEM2WOM
     /**
      * Starts the table body (within a table).
      */
+    @Override
     public void tableBodyStart()
     {
     }
@@ -242,6 +252,7 @@ public class WEM2WOM
     /**
      * Ends the table body (within a table).
      */
+    @Override
     public void tableBodyEnd()
     {
     }
@@ -249,6 +260,7 @@ public class WEM2WOM
     /**
      * Starts a table row (within a table head, foot or body).
      */
+    @Override
     public void tableRowStart()
     {
         this.tableRow = new TableRow();
@@ -258,6 +270,7 @@ public class WEM2WOM
     /**
      * Ends a table row (within a table head, foot or body).
      */
+    @Override
     public void tableRowEnd()
     {
         this.tableRow = null;
@@ -266,6 +279,7 @@ public class WEM2WOM
     /**
      * Starts a table entry (within a table row).
      */
+    @Override
     public void tableEntryStart()
     {
         this.tableEntry = new TableCell();
@@ -275,28 +289,30 @@ public class WEM2WOM
     /**
      * Ends a table entry (within a table row).
      */
+    @Override
     public void tableEntryEnd()
     {
         this.tableEntry = null;
         this.tableEntryParagraph = null;
     }
 
+    @Override
     public void typefaceStart(final ETypeface _typeface)
     {
         switch (_typeface)  {
             case BOLD:
                 final TypefaceBold bold = new TypefaceBold();
-                add(bold);
+                this.add(bold);
                 this.typeFaces.push(bold);
                 break;
             case CODE:
                 final TypefaceCode code = new TypefaceCode();
-                add(code);
+                this.add(code);
                 this.typeFaces.push(code);
                 break;
             case ITALIC:
                 final TypefaceItalic italic = new TypefaceItalic();
-                add(italic);
+                this.add(italic);
                 this.typeFaces.push(italic);
                 break;
             default:
@@ -304,40 +320,47 @@ public class WEM2WOM
         }
     }
 
+    @Override
     public void typefaceEnd(final ETypeface _typeface)
     {
         this.typeFaces.pop();
     }
 
+    @Override
     public void listBulletedStart()
     {
         final ListBulleted listDefi = new ListBulleted();
-        add(listDefi);
+        this.add(listDefi);
         this.listDefis.add(listDefi);
     }
 
+    @Override
     public void listBulletedEnd()
     {
         this.listDefis.pop();
     }
 
+    @Override
     public void listNumberedStart()
     {
         final ListNumbered listDefi = new ListNumbered();
-        add(listDefi);
+        this.add(listDefi);
         this.listDefis.add(listDefi);
     }
 
+    @Override
     public void listNumberedEnd()
     {
         this.listDefis.pop();
     }
 
+    @Override
     public void listEntryStart()
     {
         this.listDefis.peek().add(new ListEntry());
     }
 
+    @Override
     public void listEntryEnd()
     {
     }
@@ -345,6 +368,7 @@ public class WEM2WOM
     /**
      * Adds a {@link Divider divider instance}.
      */
+    @Override
     public void onDivider()
     {
         this.add(new Divider());
@@ -353,49 +377,56 @@ public class WEM2WOM
     /**
      * Adds a {@link NewLine new line instance}.
      */
+    @Override
     public void onNewLine()
     {
         this.add(new NewLine());
     }
 
+    @Override
     public void onImage(final URL _url)
     {
         this.add(new Image(_url));
     }
 
+    @Override
     public void onPreformat(final CharSequence _text)
     {
         this.paragraph.add(new Preformat(_text));
     }
 
+    @Override
     public void onText(final CharSequence _text)
     {
-        add(new TextString(_text));
+        this.add(new TextString(_text));
     }
 
+    @Override
     public void onTableOfContents(final int _deepth)
     {
-        add(new TableOfContents(_deepth));
+        this.add(new TableOfContents(_deepth));
     }
 
 
+    @Override
     public void onLinkExternal(final URL _url,
                                final CharSequence _description)
     {
         if ((_description != null) && !"".equals(_description))  {
-            add(new ExternalLinkWithDescription(_url, _description));
+            this.add(new ExternalLinkWithDescription(_url, _description));
         } else  {
-            add(new ExternalLink(_url));
+            this.add(new ExternalLink(_url));
         }
     }
 
+    @Override
     public void onLinkInternal(final CharSequence _link,
                                final CharSequence _description)
     {
         if ((_description != null) && !"".equals(_description))  {
-            add(new InternalLinkWithDescription(_link, _description));
+            this.add(new InternalLinkWithDescription(_link, _description));
         } else  {
-            add(new InternalLink(_link));
+            this.add(new InternalLink(_link));
         }
     }
 

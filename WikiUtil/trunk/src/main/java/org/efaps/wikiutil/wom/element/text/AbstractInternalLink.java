@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2010 The eFaps Team
+ * Copyright 2003 - 2011 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +69,7 @@ public abstract class AbstractInternalLink
      *
      * @return string representation of this class
      */
-    @Override()
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this)

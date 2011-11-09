@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2009 The eFaps Team
+ * Copyright 2003 - 2011 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public enum EHeader
          *
          * @return always {@link EHeader#LEVEL1}
          */
-        @Override()
+        @Override
         public EHeader getSubLevel()
         {
             return EHeader.LEVEL1;
@@ -47,7 +47,7 @@ public enum EHeader
          *
          * @return always <code>null</code>
          */
-        @Override()
+        @Override
         public EHeader getParentLevel()
         {
             return null;
@@ -61,7 +61,7 @@ public enum EHeader
          *
          * @return always {@link EHeader#LEVEL2}
          */
-        @Override()
+        @Override
         public EHeader getSubLevel()
         {
             return EHeader.LEVEL2;
@@ -72,7 +72,7 @@ public enum EHeader
          *
          * @return always {@link EHeader#PAGE}
          */
-        @Override()
+        @Override
         public EHeader getParentLevel()
         {
             return EHeader.PAGE;
@@ -86,7 +86,7 @@ public enum EHeader
          *
          * @return always {@link EHeader#LEVEL3}
          */
-        @Override()
+        @Override
         public EHeader getSubLevel()
         {
             return EHeader.LEVEL3;
@@ -97,7 +97,7 @@ public enum EHeader
          *
          * @return always {@link EHeader#LEVEL1}
          */
-        @Override()
+        @Override
         public EHeader getParentLevel()
         {
             return EHeader.LEVEL1;
@@ -111,7 +111,7 @@ public enum EHeader
          *
          * @return always {@link EHeader#LEVEL4}
          */
-        @Override()
+        @Override
         public EHeader getSubLevel()
         {
             return EHeader.LEVEL4;
@@ -122,7 +122,7 @@ public enum EHeader
          *
          * @return always {@link EHeader#LEVEL2}
          */
-        @Override()
+        @Override
         public EHeader getParentLevel()
         {
             return EHeader.LEVEL2;
@@ -136,7 +136,7 @@ public enum EHeader
          *
          * @return always {@link EHeader#LEVEL5}
          */
-        @Override()
+        @Override
         public EHeader getSubLevel()
         {
             return EHeader.LEVEL5;
@@ -147,7 +147,7 @@ public enum EHeader
          *
          * @return always {@link EHeader#LEVEL3}
          */
-        @Override()
+        @Override
         public EHeader getParentLevel()
         {
             return EHeader.LEVEL3;
@@ -161,7 +161,7 @@ public enum EHeader
          *
          * @return always {@link EHeader#LEVEL6}
          */
-        @Override()
+        @Override
         public EHeader getSubLevel()
         {
             return EHeader.LEVEL6;
@@ -172,7 +172,7 @@ public enum EHeader
          *
          * @return always {@link EHeader#LEVEL4}
          */
-        @Override()
+        @Override
         public EHeader getParentLevel()
         {
             return EHeader.LEVEL4;
@@ -186,7 +186,7 @@ public enum EHeader
          *
          * @return always <code>null</code>
          */
-        @Override()
+        @Override
         public EHeader getSubLevel()
         {
             return null;
@@ -197,7 +197,7 @@ public enum EHeader
          *
          * @return always {@link EHeader#LEVEL5}
          */
-        @Override()
+        @Override
         public EHeader getParentLevel()
         {
             return EHeader.LEVEL5;

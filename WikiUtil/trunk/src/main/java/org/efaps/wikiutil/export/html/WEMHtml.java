@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2010 The eFaps Team
+ * Copyright 2003 - 2011 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 package org.efaps.wikiutil.export.html;
 
-
 import java.net.URL;
 import java.util.Stack;
 
@@ -28,7 +27,6 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.efaps.wikiutil.wem.EProperty;
 import org.efaps.wikiutil.wem.ETypeface;
 import org.efaps.wikiutil.wem.IWikiEventModel;
-
 
 /**
  * Wiki Event Manager which is used to create a valid html page.
@@ -103,6 +101,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void onProperty(final EProperty _property,
                            final String _value)
     {
@@ -121,6 +120,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void documentStart()
     {
         if (!this.snipplet) {
@@ -134,6 +134,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void documentEnd()
     {
         if (this.toCBldr != null) {
@@ -167,6 +168,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void sectionStart()
     {
         this.headingLevel++;
@@ -178,6 +180,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void sectionEnd()
     {
         this.headingLevel--;
@@ -189,6 +192,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void headingStart()
     {
         this.toC.push(new ToCEntry(this.headingLevel));
@@ -202,6 +206,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void headingEnd()
     {
         this.heading = false;
@@ -214,6 +219,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void paragraphStart()
     {
         this.bldrs.peek().append("<p>");
@@ -225,6 +231,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void paragraphEnd()
     {
         this.bldrs.peek().append("</p>");
@@ -236,6 +243,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void tableStart()
     {
         this.bldrs.peek().append("<table>");
@@ -247,6 +255,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void tableEnd()
     {
         this.bldrs.peek().append("</table>");
@@ -258,6 +267,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void tableBodyStart()
     {
         this.bldrs.peek().append("<tbody>");
@@ -269,6 +279,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void tableBodyEnd()
     {
         this.bldrs.peek().append("</tbody>");
@@ -280,6 +291,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void tableRowStart()
     {
         this.bldrs.peek().append("<tr>");
@@ -291,6 +303,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void tableRowEnd()
     {
         this.bldrs.peek().append("</tr>");
@@ -302,6 +315,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void tableEntryStart()
     {
         this.bldrs.peek().append("<td>");
@@ -313,6 +327,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void tableEntryEnd()
     {
         this.bldrs.peek().append("</td>");
@@ -324,6 +339,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void typefaceStart(final ETypeface _typeface)
     {
         switch (_typeface) {
@@ -356,6 +372,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void typefaceEnd(final ETypeface _typeface)
     {
         this.bldrs.peek().append("</span>");
@@ -367,6 +384,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void listBulletedStart()
     {
         this.bldrs.peek().append("<ul>");
@@ -378,6 +396,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void listBulletedEnd()
     {
         this.bldrs.peek().append("</ul>");
@@ -389,6 +408,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void listNumberedStart()
     {
         this.bldrs.peek().append("<ol>");
@@ -400,6 +420,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void listNumberedEnd()
     {
         this.bldrs.peek().append("</ol>");
@@ -411,6 +432,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void listEntryStart()
     {
         this.bldrs.peek().append("<li>");
@@ -422,6 +444,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void listEntryEnd()
     {
         this.bldrs.peek().append("</li>");
@@ -433,6 +456,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void onDivider()
     {
         this.bldrs.peek().append("<hr/>");
@@ -444,6 +468,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void onNewLine()
     {
         this.bldrs.peek().append("<br/>");
@@ -455,6 +480,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void onImage(final URL _url)
     {
         String url = _url.toString();
@@ -470,6 +496,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void onPreformat(final CharSequence _text)
     {
         this.bldrs.peek().append(_text);
@@ -481,6 +508,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void onText(final CharSequence _text)
     {
         final String html = StringEscapeUtils.escapeHtml(_text.toString());
@@ -497,6 +525,7 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void onTableOfContents(final int _depth)
     {
         this.toCDepth = _depth;
@@ -512,11 +541,12 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void onLinkExternal(final URL _url,
                                final CharSequence _description)
     {
         this.bldrs.peek().append("<a href=\"").append(_url).append("\">")
-            .append(_description != null && _description.length() > 0
+            .append((_description != null) && (_description.length() > 0)
                             ? StringEscapeUtils.escapeHtml(_description.toString())
                             : _url).append("</a>");
         if (this.wem != null)  {
@@ -527,11 +557,12 @@ public class WEMHtml
     /**
      * {@inheritDoc}
      */
+    @Override
     public void onLinkInternal(final CharSequence _link,
                                final CharSequence _description)
     {
         this.bldrs.peek().append("<a href=\"").append(_link).append("\">")
-            .append(_description != null && _description.length() > 0
+            .append((_description != null) && (_description.length() > 0)
                             ? StringEscapeUtils.escapeHtml(_description.toString())
                             : _link).append("</a>");
         if (this.wem != null)  {
@@ -580,7 +611,7 @@ public class WEMHtml
     @Override
     public String toString()
     {
-        return getHtml();
+        return this.getHtml();
 
     }
 

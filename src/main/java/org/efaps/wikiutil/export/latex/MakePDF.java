@@ -83,9 +83,17 @@ public class MakePDF
     private URI wikiRootURI;
 
     /**
-     *
+     * Target file.
      */
     private File wikiTargetFile;
+
+    /**
+     * PDF LaTex executable.
+     *
+     * @see #executePDFLatex()
+     * @see #setExecutablePdfLaTeX(String)
+     */
+    private String executablePdfLaTeX = "/opt/local/bin/pdflatex";
 
     /**
      * Initializes the temporary directory.
@@ -244,6 +252,19 @@ public class MakePDF
     }
 
     /**
+     * Defines the executable of the PDF latex.
+     *
+     * @param _executablePdfLaTeX    PDF latex executable
+     * @return this instance
+     * @see #executablePdfLaTeX
+     */
+    public MakePDF setExecutablePdfLaTeX(final String _executablePdfLaTeX)
+    {
+        this.executablePdfLaTeX = _executablePdfLaTeX;
+        return this;
+    }
+
+    /**
      * Executes &quot;<code>pdflatex</code>&quot; from the Latex packages and
      * converts all Latex files to related PDF file <code>book.pdf</code>.
      *
@@ -255,7 +276,7 @@ public class MakePDF
     protected boolean executePDFLatex()
         throws IOException
     {
-        final ProcessBuilder processBuilder = new ProcessBuilder("/opt/local/bin/pdflatex", "book.tex");
+        final ProcessBuilder processBuilder = new ProcessBuilder(this.executablePdfLaTeX, "book.tex");
         processBuilder.directory(this.tempDir);
         final Process process = processBuilder.start();
 

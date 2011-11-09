@@ -23,9 +23,7 @@
 
 -->
 
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <!-- ************************************************************************
@@ -34,7 +32,7 @@
     <packaging>jar</packaging>
     <groupId>org.efaps</groupId>
     <artifactId>wikiutil</artifactId>
-    <version>0.0.4-SNAPSHOT</version>
+    <version>0.0.4</version>
     <name>eFaps WikiUtil</name>
     <description>
         eFaps Wikiutil is used to render for a file containing wiki formated information a webpage or pdf.
@@ -83,9 +81,9 @@
 
     <!-- SubVersion Repository -->
     <scm>
-        <connection>scm:svn:http://efaps.googlecode.com/svn/eFaps-Kernel</connection>
-        <developerConnection>scm:svn:https://efaps.googlecode.com/svn/eFaps-Kernel</developerConnection>
-        <url>http://efaps.googlecode.com/svn/eFaps-Kernel</url>
+        <connection>scm:svn:http://efaps.googlecode.com/svn/eFaps-Kernel/tags/V0.0.4</connection>
+        <developerConnection>scm:svn:https://efaps.googlecode.com/svn/eFaps-Kernel/tags/V0.0.4</developerConnection>
+        <url>http://efaps.googlecode.com/svn/eFaps-Kernel/tags/V0.0.4</url>
     </scm>
 
     <!-- Distribution Repository -->
@@ -149,7 +147,7 @@
                     <minmemory>128m</minmemory>
                     <maxmemory>1g</maxmemory>
                     <level>private</level>
-                    <detectLinks/>
+                    <detectLinks />
                 </configuration>
             </plugin>
             <!-- source code -->
@@ -185,7 +183,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>findbugs-maven-plugin</artifactId>
-                <configuration/>
+                <configuration />
             </plugin>
         </plugins>
     </reporting>

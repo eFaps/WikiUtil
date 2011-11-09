@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2010 The eFaps Team
+ * Copyright 2003 - 2011 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
-
 /**
  * Represents one row of a table within a Wiki page.
  *
@@ -71,7 +70,7 @@ public class TableRow
      *
      * @return string representation
      */
-    @Override()
+    @Override
     public String toString()
     {
         return new ToStringBuilder(this)

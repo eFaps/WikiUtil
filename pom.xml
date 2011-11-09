@@ -32,7 +32,7 @@
     <packaging>jar</packaging>
     <groupId>org.efaps</groupId>
     <artifactId>wikiutil</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5-SNAPSHOT</version>
     <name>eFaps WikiUtil</name>
     <description>
         eFaps Wikiutil is used to render for a file containing wiki formated information a webpage or pdf.
@@ -81,9 +81,9 @@
 
     <!-- SubVersion Repository -->
     <scm>
-        <connection>scm:svn:http://efaps.googlecode.com/svn/WikiUtil/tags/V0.0.4</connection>
-        <developerConnection>scm:svn:https://efaps.googlecode.com/svn/WikiUtil/tags/V0.0.4</developerConnection>
-        <url>http://efaps.googlecode.com/svn/WikiUtil/tags/V0.0.4</url>
+        <connection>scm:svn:http://efaps.googlecode.com/svn/WikiUtil/trunk</connection>
+        <developerConnection>scm:svn:https://efaps.googlecode.com/svn/WikiUtil/trunk</developerConnection>
+        <url>http://efaps.googlecode.com/svn/WikiUtil/</url>
     </scm>
 
     <!-- Distribution Repository -->

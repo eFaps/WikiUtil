@@ -23,7 +23,7 @@ package org.efaps.wikiutil.wom;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.efaps.wikiutil.wom.element.AbstractSection;
 import org.efaps.wikiutil.wom.property.AbstractProperty;
 

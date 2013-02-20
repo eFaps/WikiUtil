@@ -1,5 +1,5 @@
 /*
- * Copyright 2003 - 2011 The eFaps Team
+ * Copyright 2003 - 2013 The eFaps Team
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ package org.efaps.wikiutil.export.html;
 import java.net.URL;
 import java.util.Stack;
 
-import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.commons.lang3.StringEscapeUtils;
 import org.efaps.wikiutil.wem.EProperty;
 import org.efaps.wikiutil.wem.ETypeface;
 import org.efaps.wikiutil.wem.IWikiEventModel;
@@ -484,8 +484,8 @@ public class WEMHtml
     public void onImage(final URL _url)
     {
         String url = _url.toString();
-        if (!url.replace("http://","").contains("/")) {
-            url = url.replace("http://","");
+        if (!url.replace("http://", "").contains("/")) {
+            url = url.replace("http://", "");
         }
         this.bldrs.peek().append("<img src=\"").append(url).append("\"/>");
         if (this.wem != null)  {
@@ -511,7 +511,7 @@ public class WEMHtml
     @Override
     public void onText(final CharSequence _text)
     {
-        final String html = StringEscapeUtils.escapeHtml(_text.toString());
+        final String html = StringEscapeUtils.escapeHtml4(_text.toString());
         if (this.heading) {
             this.toC.peek().setValue(html);
             this.bldrs.peek().append(this.toC.peek().getHref()).append("\">");
@@ -547,7 +547,7 @@ public class WEMHtml
     {
         this.bldrs.peek().append("<a href=\"").append(_url).append("\">")
             .append((_description != null) && (_description.length() > 0)
-                            ? StringEscapeUtils.escapeHtml(_description.toString())
+                            ? StringEscapeUtils.escapeHtml4(_description.toString())
                             : _url).append("</a>");
         if (this.wem != null)  {
             this.wem.onLinkExternal(_url, _description);
@@ -563,7 +563,7 @@ public class WEMHtml
     {
         this.bldrs.peek().append("<a href=\"").append(_link).append("\">")
             .append((_description != null) && (_description.length() > 0)
-                            ? StringEscapeUtils.escapeHtml(_description.toString())
+                            ? StringEscapeUtils.escapeHtml4(_description.toString())
                             : _link).append("</a>");
         if (this.wem != null)  {
             this.wem.onLinkInternal(_link, _description);
@@ -596,8 +596,8 @@ public class WEMHtml
      * Setter method for instance variable {@link #snipplet}.
      *
      * @param _snipplet value for instance variable {@link #snipplet}
+     * @return this
      */
-
     public WEMHtml setSnipplet(final boolean _snipplet)
     {
         this.snipplet = _snipplet;
@@ -611,11 +611,8 @@ public class WEMHtml
     @Override
     public String toString()
     {
-        return this.getHtml();
-
+        return getHtml();
     }
-
-
 
     /**
      * Entry for Table of Contents.

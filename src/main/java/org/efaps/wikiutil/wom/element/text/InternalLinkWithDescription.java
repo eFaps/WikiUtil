@@ -20,7 +20,7 @@
 
 package org.efaps.wikiutil.wom.element.text;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * An internal link with description within a text.

@@ -22,7 +22,7 @@ package org.efaps.wikiutil.wom.element.text;
 
 import java.net.URL;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * An external link with description of a text.

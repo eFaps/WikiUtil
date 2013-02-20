@@ -20,7 +20,7 @@
 
 package org.efaps.wikiutil.wom.element;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Defines a table of contents within a Wiki page.

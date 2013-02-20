@@ -23,7 +23,7 @@ package org.efaps.wikiutil.wom.element;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Abstract definition of a section with sub sections (without header!).

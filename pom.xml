@@ -1,21 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <!--
 
-  Copyright 2003 - 2021 The eFaps Team
+    Copyright © 2003 - 2024 The eFaps Team (-)
 
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-  http://www.apache.org/licenses/LICENSE-2.0
+        http://www.apache.org/licenses/LICENSE-2.0
 
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
-
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
 
 -->
 
@@ -26,11 +24,11 @@
     <parent>
         <groupId>org.efaps</groupId>
         <artifactId>efaps-parent</artifactId>
-        <version>11.0.0-SNAPSHOT</version>
+        <version>17.0.0-SNAPSHOT</version>
     </parent>
     <packaging>jar</packaging>
-    <artifactId>wikiutil</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <artifactId>efaps-wikiutil</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
     <name>eFaps WikiUtil</name>
     <description>
         eFaps Wikiutil is used to render for a file containing wiki formated information a webpage or pdf.
@@ -70,38 +68,6 @@
         <name>The eFaps Team</name>
         <url>http://www.efaps.org</url>
     </organization>
-
-    <!-- Environment Settings -->
-    <issueManagement>
-        <system>eFaps Issues on Google Code</system>
-        <url>http://issues.efaps.org</url>
-    </issueManagement>
-
-    <!-- SubVersion Repository -->
-    <scm>
-        <connection>scm:svn:http://efaps.googlecode.com/svn/WikiUtil/trunk</connection>
-        <developerConnection>scm:svn:https://efaps.googlecode.com/svn/WikiUtil/trunk</developerConnection>
-        <url>http://efaps.googlecode.com/svn/WikiUtil/</url>
-    </scm>
-
-    <!-- Distribution Repository -->
-    <distributionManagement>
-        <site>
-            <id>efaps</id>
-            <name>Maven eFaps Plug-In Site</name>
-            <url>svn:https://efaps.googlecode.com/svn/site/wikiutil</url>
-        </site>
-        <snapshotRepository>
-            <id>sonatype-nexus-snapshots</id>
-            <name>Sonatype Nexus Snapshots</name>
-            <url>http://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>sonatype-nexus-staging</id>
-            <name>Nexus Release Repository</name>
-            <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-    </distributionManagement>
 
     <build>
         <defaultGoal>package</defaultGoal>
